@@ -4,7 +4,8 @@ import os
 from prettytable import PrettyTable
 from shutil import copyfile, copytree
 
-from CopyThread import startImport 
+from importing import startImport 
+from mbm import createVectors
 
 def main():
     print('Welcome to Naive text classifier main program!')
@@ -21,10 +22,14 @@ def loadOperations():
             needToBeSplitted = True
         elif arg == '-d':
             datasetPath = sys.argv[sys.argv.index(arg) + 1]
+        elif arg == '--generate-tables' or arg == '-g':
+            createVectors(sys.argv[sys.argv.index(arg) + 1])
         elif arg == '--help':
             printHelp()
             return
-    importData(datasetPath, needToBeSplitted)
+
+    if datasetPath != "":
+        importData(datasetPath, needToBeSplitted)
 
 def importData(datasetPath, needToBeSplitted):
     if os.path.isdir(sys.path[0] + "/data") is False:
