@@ -1,9 +1,13 @@
 import sys
 import os
+
 from prettytable import PrettyTable
+from shutil import copyfile, copytree
+
+from CopyThread import startImport 
 
 def main():
-    print('Welcome to text classifier main program!')
+    print('Welcome to Naive text classifier main program!')
     print('developed by Lorenzo Adreani')
 
     print('args: ', str(sys.argv))
@@ -23,7 +27,8 @@ def loadOperations():
     importData(datasetPath, needToBeSplitted)
 
 def importData(datasetPath, needToBeSplitted):
-    # os.mkdir("data")
+    if os.path.isdir(sys.path[0] + "/data") is False:
+        os.mkdir("data")
 
     x = PrettyTable()
     x.field_names = ["Category", "#dirs"]
@@ -32,12 +37,19 @@ def importData(datasetPath, needToBeSplitted):
 
     for dir in os.listdir(datasetPath):
         if os.path.isdir(datasetPath + dir):
-            nData = len(os.listdir(datasetPath + dir))
+            nData= len(os.listdir(datasetPath + dir))
             totData += nData
             x.add_row([dir, str(nData)])
     
     print(x)
     print("Dimension of dataset(in files):" + str(totData))
+    startImport(datasetPath)
+    print("Data imported!")
+
+
+def loadData(datasetPath):
+    copytree(datasetPath, sys.path[0] + "/data-000001")
+
 
 def printHelp():
     print("Questo e' il menu di help")
