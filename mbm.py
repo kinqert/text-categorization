@@ -18,10 +18,25 @@ def loadFiles(datasethPath):
 
     for group in os.listdir(trainPath):
         table = loadGroup(trainPath, group)
-        groupTables += table
+        groupTables.append({
+            "group" : group,
+            "table" : table
+        })
         appendLog(str(table), "table-{}".format(group))
 
+    printResultTables(groupTables)
     print("Done!")
+
+def printResultTables(groupTables):
+    printTable = PrettyTable()
+    printTable.title = "Result learning"
+    printTable.field_names = ["Category", "|V|"]
+    
+    for table in groupTables:
+        printTable.add_row([table["group"], len(table["table"])])
+    
+    print(printTable)
+    appendLog(str(printTable), "result-learning")
 
 def loadGroup(trainPath, group):
     print("Learning group: {}".format(group))

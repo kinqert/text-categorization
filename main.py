@@ -24,12 +24,21 @@ def loadOperations():
             datasetPath = sys.argv[sys.argv.index(arg) + 1]
         elif arg == '--generate-tables' or arg == '-g':
             createVectors(sys.argv[sys.argv.index(arg) + 1])
+        elif arg == '--show-datasets':
+            printDatasets()
         elif arg == '--help':
             printHelp()
             return
 
     if datasetPath != "":
         importData(datasetPath, needToBeSplitted)
+
+def printDatasets():
+    table = PrettyTable()
+    table.field_names = ["Datasets"]
+    for file in os.listdir("data"):
+        table.add_row(file)
+    print(table)
 
 def importData(datasetPath, needToBeSplitted):
     if os.path.isdir(sys.path[0] + "/data") is False:
