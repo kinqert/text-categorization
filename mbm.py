@@ -5,77 +5,127 @@ from collections import namedtuple
 from prettytable import PrettyTable
 from progressbar import ProgressBar, Percentage, Bar
 
-from log import appendLog
+from log import appendLog, printAndLog
 
 def createVectors(dataseth):
     datasethPath = "data/{}".format(dataseth)
     if os.path.isdir(datasethPath):
-        loadFiles(datasethPath)
+        print("Creating multi-variate bernulli model")
+        mbmTable = loadTableFromDataseth(datasethPath, "mbm")
+        print("Creating multinomial model")
+        mmTable = loadTableFromDataseth(datasethPath, "mm")
 
-def loadFiles(datasethPath):
+        printResultTables(mbmTable)
+        printResultTables(mmTable)
+
+        print("Done!")
+
+
+
+def loadTableFromDataseth(datasethPath, type):
     trainPath = "{}/train".format(datasethPath)
-    groupTables = []
 
+    count = True
+
+    if (type == "mbm"):
+        count = False
+
+    groups = []
+    totalWords = []
+    table = {
+        "groups" : groups,
+        "totalWords" : totalWords,
+        "type" : type
+    }
     for group in os.listdir(trainPath):
-        table = loadGroup(trainPath, group)
-        groupTables.append({
-            "group" : group,
-            "table" : table
-        })
-        appendLog(str(table), "table-{}".format(group))
+        group = loadGroup(trainPath, group, count)
+        groups.append(group)
+        totalWords = getDistictWords(group["dWords"], count, totalWords)
 
-    printResultTables(groupTables)
-    print("Done!")
+        appendLog(str(group), "group-{}".format(group))
 
-def printResultTables(groupTables):
+    return table
+
+def printResultTables(table):
+    logname = "result-learning"
+    printAndLog("Result Learning", logname)
+
     printTable = PrettyTable()
-    printTable.title = "Result learning"
-    printTable.field_names = ["Category", "|V|"]
-    
-    for table in groupTables:
-        printTable.add_row([table["group"], len(table["table"])])
-    
-    print(printTable)
-    appendLog(str(printTable), "result-learning")
+    printTable.title = table["type"]
 
-def loadGroup(trainPath, group):
+    totalWords = 0
+    singleWords = 0
+
+    for word in table["totalWords"]:
+        if word["count"] == 1:
+            singleWords += 1
+        printTable.add_column(word["word"], [word["count"]])
+        totalWords += 1
+
+   
+    printAndLog(str(printTable), logname)
+    printAndLog("Total words: {}". format(totalWords))
+
+def loadGroup(trainPath, group, count):
     print("Learning group: {}".format(group))
     groupPath = "{}/{}".format(trainPath, group)
     bar = ProgressBar(len(os.listdir(groupPath)), [Percentage(), Bar()]).start()
     i = 0
-    table = []
-    for file in os.listdir(groupPath):
 
-        table += createTable("{}/{}".format(groupPath, file))
+    dWords = []
+    wordsFiles = []
+
+    group = {
+        "group" : group,
+        "dWords" : dWords,
+        "wordsFiles" : wordsFiles
+    }
+
+    for file in os.listdir(groupPath):
+        wordsFile = getWordsFromFile("{}/{}".format(groupPath, file), count)
+        wordsFiles.append(wordsFile)
+        dWords = getDistictWords(wordsFile, count, dWords)
+
         i += 1
         bar.update(i)
     bar.finish()
 
-    return table
+    return group
 
-def createTable(filePath):
+def getWordsFromFile(filePath, count):
     file = open(filePath, "r", encoding= "ISO-8859-1")
     words = []
 
+    # modify here for add more rule for splitting 
     for line in file.readlines():
         words += line.split(" ")
-    vWords = []
-
-    for word in words:
-        try:
-            vWords.index(word)
-        except:
-            vWords.append(word)
     
-    table = PrettyTable()
-    table.title = filePath
-    table.field_names = vWords
+    dWords = getDistictWords(words, count)
 
     pathSplitted = filePath.split("/")
     fileName = pathSplitted.pop()
     fileGroup = pathSplitted.pop()
 
-    #for word in vWords:
-    #    appendLog(word, "mbm-{}-{}".format(fileGroup, fileName))
+    return dWords
+
+
+def getDistictWords(words, count, dWords = []):
+    for newWord in words:
+        exist = False
+
+        
+
+        for dWord in dWords:
+            if dWord["word"] == dWord:
+                exist = True
+                if count == True:
+                    dWord["count"] = dWord["count"] + 1
+                break
+        
+        if exist == False:
+            dWords.append({
+                "word" : newWord,
+                "count" : 1
+            })
     
-    return vWords
+    return dWords

@@ -1,11 +1,15 @@
 import os
 import sys
 
-def appendLog(messagge, group):
+def appendLog(messagge, name):
     createLogsFolderIfNotExist()
-    logFile = open("logs/{}".format(group), "a")
+    logFile = open("logs/{}".format(name), "a")
     logFile.write(messagge)
     logFile.close
+
+def printAndLog(message, name):
+    print(message)
+    appendLog(message, name)
 
 def createLogsFolderIfNotExist():
     if checkLogsFolder() == False:
