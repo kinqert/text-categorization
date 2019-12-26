@@ -94,13 +94,19 @@ def loadGroup(trainPath, group, count):
 
 def getWordsFromFile(filePath, count):
     file = open(filePath, "r", encoding= "ISO-8859-1")
-    words = []
+    dWords = []
 
     # modify here for add more rule for splitting 
     for line in file.readlines():
-        words += line.split(" ")
+        words = line.split(" ")
+
+        for word in words:
+            dWords.append({
+                "word" : word,
+                "count" : 1
+            })
     
-    dWords = getDistictWords(words, count)
+    dWords = getDistictWords(dWords, count)
 
     pathSplitted = filePath.split("/")
     fileName = pathSplitted.pop()
@@ -110,22 +116,19 @@ def getWordsFromFile(filePath, count):
 
 
 def getDistictWords(words, count, dWords = []):
+    #print("get distict words\nfrom: {}\nto: {}".format(str(words), str(dWords)))
     for newWord in words:
         exist = False
 
-        
-
-        for dWord in dWords:
-            if dWord["word"] == dWord:
-                exist = True
-                if count == True:
-                    dWord["count"] = dWord["count"] + 1
-                break
+        ref = [dword for dword in dWords if dword["word"] == newWord["word"]]
+        if (len(ref) >= 2):
+            return
+        elif (len(ref) == 1):
+            exist = True
+            if count == True:
+                ref[0]["count"] = ref[0]["count"] + 1
         
         if exist == False:
-            dWords.append({
-                "word" : newWord,
-                "count" : 1
-            })
+            dWords.append(newWord)
     
     return dWords
