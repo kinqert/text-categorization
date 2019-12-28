@@ -47,7 +47,7 @@ def loadTableFromDataseth(datasethPath, type):
     return table
 
 def printResultTables(table):
-    logname = "result-learning"
+    logname = "result-learning-{}".format(table["type"])
     printAndLog("Result Learning", logname)
 
     printTable = PrettyTable()
@@ -64,7 +64,8 @@ def printResultTables(table):
 
    
     printAndLog(str(printTable), logname)
-    printAndLog("Total words: {}". format(totalWords))
+    printAndLog("Total words: {}".format(totalWords), logname)
+    printAndLog("Single words: {}".format(singleWords), logname)
 
 def loadGroup(trainPath, group, count):
     print("Learning group: {}".format(group))
