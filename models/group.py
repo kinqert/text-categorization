@@ -1,11 +1,14 @@
 class Group:
-    group = ""
-    dWords = []
-    wordsFiles = []
 
-
-    def __init__(self, group, dWords = [], wordsFiles = []):
+    def __init__(self, groupName, groupPath, groupType):
         super().__init__()
-        self.group = group
-        self.dWords = dWords
-        self.wordsFiles = wordsFiles
+        self.name = groupName
+        self.groupPath = groupPath
+        self.groupType = groupType
+
+        self.documents = []
+        self.dWords = []
+        self.wordsFiles = []
+
+    def toString(self):
+        return f"Group: {self.name}, Type: {self.groupType},\nPath: {self.groupPath}, Documents: {len(self.documents)}\n"

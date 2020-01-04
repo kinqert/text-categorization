@@ -1,6 +1,4 @@
-class Dwords:
-    word = ""
-    counted = 0
+class Word:
 
     def __init__(self, word, counted = 1):
         super().__init__()
