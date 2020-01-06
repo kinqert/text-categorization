@@ -31,6 +31,7 @@ def loadOperations():
         elif arg == '--generate-tables' or arg == '-g':
             dataset = createDataset(sys.argv[sys.argv.index(arg) + 1])
             startTraining(dataset)
+            plotWordsCountForAllDocuments(dataset)
         elif arg == '--show-datasets':
             printDatasets()
         elif arg == '--help':
@@ -39,9 +40,6 @@ def loadOperations():
 
     if datasetPath != "":
         importData(datasetPath, needToBeSplitted)
-    
-    if dataset != None:
-        plotWordsCountForAllDocuments(dataset)
 
 def printDatasets():
     table = PrettyTable()

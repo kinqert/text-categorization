@@ -28,15 +28,16 @@ def startTraining(dataset: Dataset):
         readThread = Thread(target=readDocuments, args=(documentsQueue,))
         readThread.start()
         threads.append(readThread)
-    
+
     for thread in threads:
         thread.join()
+
+    print("Done reading")
     
 
 def readDocuments(documentQueue: Queue):
     while not documentQueue.empty():
         document = documentQueue.get()
-        print(f"reading document {document.documentName}")
         file = open(document.documentPath, 'r', encoding= "ISO-8859-1")
 
         totalWords = []
@@ -46,3 +47,4 @@ def readDocuments(documentQueue: Queue):
         
         for word in totalWords:
             document.searchAndAddWord(Word(word))
+        sleep(0.0001)

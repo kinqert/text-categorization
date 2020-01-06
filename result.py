@@ -1,4 +1,5 @@
 from threading import Thread, Event
+from time import sleep
 from queue import Queue
 
 import matplotlib.pyplot as plt
@@ -24,11 +25,14 @@ def plotWordsCountForAllDocuments(dataset: Dataset):
     
     for i in range(0, remainingThread):
         countThread = Thread(target=countWordsTimes, args=(wordQueue, wordTimesAxis, queueDone, ))
+        countThread.setDaemon(True)
         countThread.start()
         threads.append(countThread)
     
     for thread in threads:
         thread.join()
+    
+    print("Plot created")
     
     plt.plot(wordTimesAxis)
     plt.ylabel('Number of words')
@@ -44,8 +48,6 @@ def loadWordQueue(dataset: Dataset, wordQueue: Queue, queueDone: Event):
     queueDone.set()
 
 def countWordsTimes(wordQueue: Queue, wordTimesAxis, queueDone: Event):
-    totalWork = 0
-
     while not queueDone.isSet():
         while not wordQueue.empty():
             word = wordQueue.get()
@@ -53,5 +55,5 @@ def countWordsTimes(wordQueue: Queue, wordTimesAxis, queueDone: Event):
                 wordTimesAxis[word.counted] += 1
             else:
                 wordTimesAxis.insert(word.counted + 1, 1)
-            totalWork += 1
-            print(f"total work: {totalWork}")
+
+            sleep(0.0001)
