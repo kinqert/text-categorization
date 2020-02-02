@@ -5,7 +5,12 @@ from prettytable import PrettyTable
 from shutil import copyfile, copytree
 
 from importing import startImport 
+from factory.datasetFactory import createDataset
 from mbm import createVectors
+from log import printAndLog
+from result import plotWordsCountForAllDocuments
+from training import startTraining
+from saving import saveDataset
 
 def main():
     print('Welcome to Naive text classifier main program!')
@@ -17,13 +22,18 @@ def main():
 def loadOperations():
     needToBeSplitted = False
     datasetPath = ""
+    dataset = None
+
     for arg in sys.argv:
         if arg == '-s':
             needToBeSplitted = True
         elif arg == '-d':
             datasetPath = sys.argv[sys.argv.index(arg) + 1]
         elif arg == '--generate-tables' or arg == '-g':
-            createVectors(sys.argv[sys.argv.index(arg) + 1])
+            dataset = createDataset(sys.argv[sys.argv.index(arg) + 1])
+            startTraining(dataset)
+            saveDataset(dataset)
+            plotWordsCountForAllDocuments(dataset)
         elif arg == '--show-datasets':
             printDatasets()
         elif arg == '--help':
