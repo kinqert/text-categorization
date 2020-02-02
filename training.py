@@ -33,6 +33,8 @@ def startTraining(dataset: Dataset):
         thread.join()
 
     print("Done reading")
+
+
     
 
 def readDocuments(documentQueue: Queue):
@@ -42,7 +44,15 @@ def readDocuments(documentQueue: Queue):
 
         totalWords = []
         for line in file.readlines():
-            words = str(line).split(" ") # Add here more separator for testing
+            finalWords = []
+            splitter = [" ", ",", "."]
+            words = [line]
+            for split in splitter:
+                newWords = []
+                for word in words:
+                    newWords += str(word).split(split)
+                words = newWords
+            
             totalWords += words
         
         for word in totalWords:

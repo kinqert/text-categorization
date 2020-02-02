@@ -10,6 +10,7 @@ from mbm import createVectors
 from log import printAndLog
 from result import plotWordsCountForAllDocuments
 from training import startTraining
+from saving import saveDataset
 
 def main():
     print('Welcome to Naive text classifier main program!')
@@ -31,6 +32,7 @@ def loadOperations():
         elif arg == '--generate-tables' or arg == '-g':
             dataset = createDataset(sys.argv[sys.argv.index(arg) + 1])
             startTraining(dataset)
+            saveDataset(dataset)
             plotWordsCountForAllDocuments(dataset)
         elif arg == '--show-datasets':
             printDatasets()
