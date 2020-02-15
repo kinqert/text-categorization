@@ -1,19 +1,44 @@
 from models.word import Word
 
 class Document:
-    def __init__(self, documentName, documentPath):
+    def __init__(self, name, path):
         super().__init__()
-        self.documentName = documentName
-        self.documentPath = documentPath
+        self.name = name
+        self.path = path
         self.words = []
     
     def readWords(self):
-        file = open(self.documentPath)
+        file = open(self.path, 'r', encoding="ISO-8859-1")
 
-    def searchAndAddWord(self, word: Word):
-        for w in self.words:
-            if word.word == w.word:
-                w.counted += word.counted 
-                return
+        readedWords = []
+
+        for line in file.readline():
+            readedWords.append(line)
         
-        self.words.append(word)
+        splitters = [" ", ",", "."]
+
+        for splitter in splitters:
+            splittedWords = []
+            for word in readedWords:
+                splittedWords += word.split(splitter)
+            
+            readedWords = splittedWords
+        
+        for word in readedWords:
+            if word is not "":
+                self.searchAndAddWord(Word(word))
+
+    def searchWord(self, text):
+        for word in self.words:
+            if word.text == text:
+                return word
+        
+        return None
+
+    def searchAndAddWord(self, newWord: Word):
+        existedWord = self.searchWord(newWord.text)
+
+        if existedWord is not None:
+                existedWord += newWord
+        else:
+            self.words.append(newWord)

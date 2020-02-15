@@ -1,5 +1,6 @@
 import sys
 import os
+import pickle
 
 from models.dataset import Dataset
 
@@ -10,19 +11,16 @@ def createDirIfNotExist(dir):
 
 def saveDataset(dataset: Dataset):
 
-    resultPath = f"{sys.path[0]}/data/{dataset.name}/results"
+    resultPath = f"{sys.path[0]}/data/{dataset.name}/save/{dataset.name}.pkl"
 
     createDirIfNotExist(resultPath)
-    
-    for group in dataset.trainGroups:
-        groupPath = f"{resultPath}/{group.name}"
-        
-        file = open(groupPath, "w")
 
-        for document in group.documents:
-            file.write(f"Documnet: {documemt.documentName} [")
-            for word in document.words:
-                file.write(f"'word: {word.word}, counted: {word.counted}'")
-            file.write("]")
-        file.close()
-        
+    with open(resultPath, "wb") as file:
+        pickle.dump(dataset, file, pickle.HIGHEST_PROTOCOL)
+
+def loadDataset(name):
+    resultPath = f"{sys.path[0]}/data/{name}/save/{name}.pkl"
+
+    with open(resultPath, "rb") as file:
+        return pickle.load(file)
+    

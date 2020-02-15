@@ -34,17 +34,19 @@ def createDataset(datasethName):
     for i in range(0, maxThreads):
         threads[i].join()
     
+    print("dataset created")
+    
     return dataset
     
 def createDocumentsForGroup(groupQueue: Queue):
     while not groupQueue.empty():
         group = groupQueue.get()
-        print(f"Creating group {group.name} for {group.groupType}...")
-        nameDirs = os.listdir(group.groupPath)
-        print(f"Total documents for {group.name}-{group.groupType}: {len(nameDirs)}")
+        print(f"Creating group {group.name} for {group.type}...")
+        nameDirs = os.listdir(group.path)
+        print(f"Total documents for {group.name}-{group.type}: {len(nameDirs)}")
         print(f"Dir list: {nameDirs}")
         for fileName in nameDirs:
-            doc = Document(fileName, f"{group.groupPath}/{fileName}")
+            doc = Document(fileName, f"{group.path}/{fileName}")
             group.documents.append(doc)
-        print(f"Done creating group {group.name}-{group.groupType}!\nDocument size:{len(group.documents)}")
+        print(f"Done creating group {group.name}-{group.type}!\nDocument size:{len(group.documents)}")
 

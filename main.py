@@ -27,11 +27,13 @@ def loadOperations():
     for arg in sys.argv:
         if arg == '-s':
             needToBeSplitted = True
-        elif arg == '-d':
+        elif arg == '-p':
             datasetPath = sys.argv[sys.argv.index(arg) + 1]
         elif arg == '--generate-tables' or arg == '-g':
             dataset = createDataset(sys.argv[sys.argv.index(arg) + 1])
-            startTraining(dataset)
+            for group in dataset.trainGroups:
+                group.readDocuments()
+            #startTraining(dataset)
             saveDataset(dataset)
             plotWordsCountForAllDocuments(dataset)
         elif arg == '--show-datasets':

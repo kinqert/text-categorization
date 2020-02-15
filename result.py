@@ -5,55 +5,61 @@ from queue import Queue
 import matplotlib.pyplot as plt
 
 from models.dataset import Dataset
+from models.word import GroupedWord
 from setting import Setting
 
 def plotWordsCountForAllDocuments(dataset: Dataset):
-    wordTimesAxis = []
+    plt.style.use('dark_background')
 
+    wordCounted = []
+    wordDocument = []
+
+    words = []
     wordQueue = Queue()
     queueDone = Event()
+    maxCountedWord: GroupedWord
+    maxDocumentWord: GroupedWord
 
-    loadWordThread = Thread(target=loadWordQueue, args=(dataset, wordQueue, queueDone, ))
-    loadWordThread.start()
+    for group in dataset.trainGroups:
+        print(f"group {group.name} words: {len(group.groupedWords)}")
 
-    threads = [] 
-    threads.append(loadWordThread)
+        for word in group.groupedWords:
+            words.append(word)
 
-    remainingThread = 1
-    if (Setting.max_thread - 1 >= 1):
-        remainingThread = Setting.max_thread - 1
+    maxCounted = 0
+    maxDocument = 0
+    for word in words:
+        if maxCounted < word.counted:
+            maxCounted = word.counted
+            maxCountedWord = word
+        if maxDocument < word.documents:
+            maxDocument = word.documents
+            maxDocumentWord = word
     
-    for i in range(0, remainingThread):
-        countThread = Thread(target=countWordsTimes, args=(wordQueue, wordTimesAxis, queueDone, ))
-        countThread.setDaemon(True)
-        countThread.start()
-        threads.append(countThread)
+    for i in range(0, maxCounted + 1):
+        wordCounted.append(0)
     
-    for thread in threads:
-        thread.join()
+    for i in range(0, maxDocument + 1):
+        wordDocument.append(0)
+
+    for word in words:
+        wordCounted[word.counted] += 1
+        wordDocument[word.documents] += 1  
     
-    print("Plot created")
+    print(f"most counted word: {maxCountedWord.text}, counted: {maxCountedWord.counted}, documents: {maxCountedWord.documents}")
+    print(f"most document word: {maxDocumentWord.text}, counted: {maxDocumentWord.counted}, documents: {maxDocumentWord.documents}")
     
-    plt.plot(wordTimesAxis)
-    plt.ylabel('Number of words')
+    plt.title("Results")
+
+    plt.subplot(1, 2, 1)
+    plt.plot(wordCounted, "bx")
+    plt.ylabel('Number of words with x counted')
     plt.xlabel('Number of count')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(wordDocument, "rx")
+    plt.ylabel('Number of words with x documents')
+    plt.xlabel('Number of document')
     plt.show()
 
-def loadWordQueue(dataset: Dataset, wordQueue: Queue, queueDone: Event):
-    for group in dataset.trainGroups:
-        for document in group.documents:
-            for word in document.words:
-                wordQueue.put(word)
-    
-    queueDone.set()
-
-def countWordsTimes(wordQueue: Queue, wordTimesAxis, queueDone: Event):
-    while not queueDone.isSet():
-        while not wordQueue.empty():
-            word = wordQueue.get()
-            if len(wordTimesAxis) > word.counted and wordTimesAxis[word.counted] != None:
-                wordTimesAxis[word.counted] += 1
-            else:
-                wordTimesAxis.insert(word.counted + 1, 1)
-
-            sleep(0.0001)
+    print("Plot created")

@@ -1,3 +1,3 @@
 # Text Categorization
 
-Project for the course of AI at University Of Florence.
+Progetto per il corso di AI per l'università degli studi di Firenze
