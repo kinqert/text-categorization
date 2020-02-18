@@ -21,9 +21,9 @@ def plotWordsCountForAllDocuments(dataset: Dataset):
     maxDocumentWord: GroupedWord
 
     for group in dataset.trainGroups:
-        print(f"group {group.name} words: {len(group.groupedWords)}")
+        print(f"group {group.name} words: {len(group.dictionary.words)}")
 
-        for word in group.groupedWords:
+        for word in group.dictionary.words:
             words.append(word)
 
     maxCounted = 0

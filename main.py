@@ -31,10 +31,9 @@ def loadOperations():
             datasetPath = sys.argv[sys.argv.index(arg) + 1]
         elif arg == '--generate-tables' or arg == '-g':
             dataset = createDataset(sys.argv[sys.argv.index(arg) + 1])
-            for group in dataset.trainGroups:
-                group.readDocuments()
-            #startTraining(dataset)
-            saveDataset(dataset)
+            dataset.readDataset()
+            dataset.createDictionary()
+            #saveDataset(dataset)
             plotWordsCountForAllDocuments(dataset)
         elif arg == '--show-datasets':
             printDatasets()

@@ -11,11 +11,12 @@ def createDirIfNotExist(dir):
 
 def saveDataset(dataset: Dataset):
 
-    resultPath = f"{sys.path[0]}/data/{dataset.name}/save/{dataset.name}.pkl"
+    dataPath = f"{sys.path[0]}/data/{dataset.name}/save/"
+    datasetPath = f"{sys.path[0]}/data/{dataset.name}/save/{dataset.name}.pkl"
 
-    createDirIfNotExist(resultPath)
+    createDirIfNotExist(dataPath)
 
-    with open(resultPath, "wb") as file:
+    with open(datasetPath, "wb") as file:
         pickle.dump(dataset, file, pickle.HIGHEST_PROTOCOL)
 
 def loadDataset(name):
