@@ -34,7 +34,7 @@ def loadOperations():
             dataset.readDataset()
             dataset.createDictionary()
             #saveDataset(dataset)
-            plotWordsCountForAllDocuments(dataset)
+            #plotWordsCountForAllDocuments(dataset)
         elif arg == '--show-datasets':
             printDatasets()
         elif arg == '--help':

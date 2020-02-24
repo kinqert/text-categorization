@@ -1,7 +1,7 @@
 from models.word import WeightedWordVector, WeightedDictionary
 from models.group import Group
 
-from log import printAndLog
+from log import printAndLog, appendLog
 
 class Dataset:
 
@@ -32,22 +32,12 @@ class Dataset:
             for word in group.dictionary.words:
                 self.weightedDictionary.searchAndAddWord(word)
         
-        print(f"Dizionario creato con {len(self.weightedDictionary.words)}")
+        print(f"Dizionario creato con {len(self.weightedDictionary.weightedWords)}")
         self.printWeightDictionaryDebugInfo()
 
     def printWeightDictionaryDebugInfo(self):
-        text = ""
         for wordWeight in self.weightedDictionary.weightedWords:
-            text += f"Word: {wordWeight.text} [\n"
-
-            for weight in wordWeight.groupVector:
-                text += f"group: {weight.group.name}, counted: {weight.counted}, documents: {weight.documents}\n"
-            
-            text += "]\n"
-            print(text)
-            printAndLog(text, "Dataset-weight-vector")
-            text = ""
-        
+            appendLog(wordWeight, "dataset-weight-vector")
                 
     def toString(self):
         string = f"Dataset: {self.name}\n"

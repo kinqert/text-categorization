@@ -20,6 +20,9 @@ class GroupedWord(Word):
         if self.text == newWord.text:
             self.counted += newWord.counted
             self.documents += newWord.documents
+    
+    def __str__(self):
+        return f"text: {self.text}, group: {self.group}, counted: {self.counted}, documents: {self.documents}"
 
 class WeightedWordVector:
 
@@ -38,15 +41,14 @@ class WeightedWordVector:
     def addWeight(self, word: GroupedWord):
         #Add a better way
         for groupedWord in self.groupVector:
-            if groupedWord["group"] == word.group.name:
-                groupedWord["word"] += word
+            if groupedWord.group == word.group.name:
+                groupedWord += word
                 return
         
-        self.groupVector.append(
-            {
-                "word" : word,
-                "group" : word.group.name
-            })
+        self.groupVector.append(word)
+
+    def __str__(self):
+        return f"word: {self.text}, weights: [{self.groupVector}]"
 
 
 class Dictionary:
@@ -75,7 +77,7 @@ class WeightedDictionary(Dictionary):
         self.weightedWords = []
     
     def searchWord(self, text):
-        for word in self.words:
+        for word in self.weightedWords:
             if word.text == text:
                 return word
         
@@ -87,4 +89,4 @@ class WeightedDictionary(Dictionary):
         if existedWord is not None:
                 existedWord.addWeight(newWord)
         else:
-            self.words.append(WeightedWordVector(newWord))
+            self.weightedWords.append(WeightedWordVector(newWord))
