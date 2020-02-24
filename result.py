@@ -1,7 +1,3 @@
-from threading import Thread, Event
-from time import sleep
-from queue import Queue
-
 import matplotlib.pyplot as plt
 
 from models.dataset import Dataset
@@ -15,8 +11,6 @@ def plotWordsCountForAllDocuments(dataset: Dataset):
     wordDocument = []
 
     words = []
-    wordQueue = Queue()
-    queueDone = Event()
     maxCountedWord: GroupedWord
     maxDocumentWord: GroupedWord
 

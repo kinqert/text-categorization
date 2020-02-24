@@ -15,7 +15,8 @@ class Document:
         for line in file.readline():
             readedWords.append(line)
         
-        splitters = [" ", ",", "."]
+        #splitters = [" ", ",", "."]
+        splitters = [" "] 
 
         for splitter in splitters:
             splittedWords = []
@@ -25,5 +26,5 @@ class Document:
             readedWords = splittedWords
         
         for word in readedWords:
-            if word is not "":
+            if word != "":
                 self.dictionary.searchAndAddWord(Word(word))
