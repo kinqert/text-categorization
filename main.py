@@ -11,6 +11,7 @@ from log import printAndLog
 from result import plotWordsCountForAllDocuments
 from training import startTraining
 from saving import saveDataset
+from dataloss import analyzeLostWords
 
 def main():
     print('Welcome to Naive text classifier main program!')
@@ -33,6 +34,7 @@ def loadOperations():
             dataset = createDataset(sys.argv[sys.argv.index(arg) + 1])
             dataset.readDataset()
             dataset.createDictionary()
+            analyzeLostWords(dataset)
             #saveDataset(dataset)
             #plotWordsCountForAllDocuments(dataset)
         elif arg == '--show-datasets':

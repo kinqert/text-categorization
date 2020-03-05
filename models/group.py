@@ -18,5 +18,5 @@ class Group:
             for word in document.dictionary.words:
                 self.dictionary.searchAndAddWord(GroupedWord(word.text, self, word.counted))
 
-    def toString(self):
-        return f"Group: {self.name}, Type: {self.groupType},\nPath: {self.groupPath}, Documents: {len(self.documents)}\n"
+    def __str__(self):
+        return f"Group: {self.name}"

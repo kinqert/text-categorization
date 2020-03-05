@@ -6,25 +6,16 @@ class Document:
         self.name = name
         self.path = path
         self.dictionary = Dictionary()
+        self.readedWords = []
     
     def readWords(self):
         file = open(self.path, 'r', encoding="ISO-8859-1")
 
-        readedWords = []
-
-        for line in file.readline():
-            readedWords.append(line)
+        self.readedWords = file.readlines()
         
-        #splitters = [" ", ",", "."]
-        splitters = [" "] 
-
-        for splitter in splitters:
-            splittedWords = []
-            for word in readedWords:
-                splittedWords += word.split(splitter)
+        for word in self.readedWords:
+            self.readedWords += word.split()
             
-            readedWords = splittedWords
         
-        for word in readedWords:
-            if word != "":
-                self.dictionary.searchAndAddWord(Word(word))
+        for word in self.readedWords:
+            self.dictionary.searchAndAddWord(Word(word))

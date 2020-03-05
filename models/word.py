@@ -48,7 +48,21 @@ class WeightedWordVector:
         self.groupVector.append(word)
 
     def __str__(self):
-        return f"word: {self.text}, weights: [{self.groupVector}]"
+        
+        ris = f"word: {self.text}, weights: ["
+        for group in self.groupVector:
+            ris += f"{str(group)},"
+        ris += "]"
+
+        return ris;
+
+    def getSumOfCounted(self):
+        ris = 0
+
+        for word in self.groupVector:
+            ris += word.counted
+
+        return ris
 
 
 class Dictionary:
@@ -70,6 +84,14 @@ class Dictionary:
                 existedWord += newWord
         else:
             self.words.append(newWord)
+        
+    def getSumOfCounted(self):
+        ris = 0
+
+        for word in self.words:
+            ris += word.counted
+        
+        return ris
     
 class WeightedDictionary(Dictionary):
     def __init__(self):
@@ -90,3 +112,11 @@ class WeightedDictionary(Dictionary):
                 existedWord.addWeight(newWord)
         else:
             self.weightedWords.append(WeightedWordVector(newWord))
+    
+    def getSumOfCounted(self):
+        ris = 0
+
+        for word in self.weightedWords:
+            ris += word.getSumOfCounted()
+        
+        return ris
