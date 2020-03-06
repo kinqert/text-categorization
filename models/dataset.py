@@ -43,12 +43,12 @@ class Dataset:
             print(f"Done adding weight from group {group.name}")
 
         
-        print(f"Dizionario creato con {len(self.weightedDictionary.weightedWords)}")
+        print(f"Dizionario creato con {len(self.weightedDictionary.words)}")
         self.printWeightDictionaryDebugInfo()
 
     def printWeightDictionaryDebugInfo(self):
-        for wordWeight in self.weightedDictionary.weightedWords:
-            appendLog(wordWeight, "dataset-weight-vector")
+        for wordWeight in self.weightedDictionary.words:
+            appendLog(f"{wordWeight}\n", "dataset-weight-vector")
                 
     def toString(self):
         string = f"Dataset: {self.name}\n"
