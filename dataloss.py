@@ -8,7 +8,7 @@ def analyzeLostWords(dataset: Dataset):
 
     for group in dataset.trainGroups:
         for document in group.documents:
-            readedWordsCounted += len(document.readedWords)
+            readedWordsCounted += document.totalWords
             wordCounted += document.dictionary.getSumOfCounted()
         
         groupedCounted += group.dictionary.getSumOfCounted()

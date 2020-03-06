@@ -7,6 +7,7 @@ class Document:
         self.path = path
         self.dictionary = Dictionary()
         self.readedWords = []
+        self.totalWords = 0
     
     def readWords(self):
         file = open(self.path, 'r', encoding="ISO-8859-1")
@@ -16,6 +17,7 @@ class Document:
         for line in lines:
             self.readedWords += line.split()
             
+        self.totalWords = len(self.readedWords)
         
         for word in self.readedWords:
             self.dictionary.searchAndAddWord(Word(word))

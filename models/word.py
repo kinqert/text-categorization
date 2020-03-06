@@ -8,6 +8,7 @@ class Word:
     def __add__(self, newWord):
         if self.text == newWord.text:
             self.counted += newWord.counted
+            return self
 
 class GroupedWord(Word):
 
@@ -20,6 +21,7 @@ class GroupedWord(Word):
         if self.text == newWord.text:
             self.counted += newWord.counted
             self.documents += newWord.documents
+            return self
     
     def __str__(self):
         return f"text: {self.text}, group: {self.group}, counted: {self.counted}, documents: {self.documents}"
@@ -69,21 +71,34 @@ class Dictionary:
     def __init__(self):
         super().__init__()
         self.words = []
-    
-    def searchWord(self, text):
-        for word in self.words:
-            if word.text == text:
-                return word
-        
-        return None
 
     def searchAndAddWord(self, newWord: Word):
-        existedWord = self.searchWord(newWord.text)
+        if len(self.words) == 0:
+            self.words.insert(0, newWord)
+            return
 
-        if existedWord is not None:
-                existedWord += newWord
-        else:
-            self.words.append(newWord)
+        l = 0
+        r = len(self.words)
+        i = int((r - l) / 2)
+        while True:
+            if self.words[i].text == newWord.text:
+                self.words[i] += newWord
+                break
+            elif self.words[i].text > newWord.text:
+                if (i - l) / 2 < 1:
+                    self.words.insert(i, newWord)
+                    break
+                else:    
+                    r = i 
+                    i = int(l + ((i - l) / 2))
+            elif self.words[i].text < newWord.text:
+                if (r - i) / 2 < 1:
+                    self.words.insert(i + 1, newWord)
+                    break
+                else:
+                    l = i
+                    i = int(i + ((r - i) / 2))
+
         
     def getSumOfCounted(self):
         ris = 0

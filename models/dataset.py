@@ -1,3 +1,5 @@
+from progressbar import ProgressBar, Percentage, Bar
+
 from models.word import WeightedWordVector, WeightedDictionary
 from models.group import Group
 
@@ -30,8 +32,16 @@ class Dataset:
 
         print("Creating weight")
         for group in self.trainGroups:
+            print(f"Adding weight from group {group.name}")
+            bar = ProgressBar(len(group.dictionary.words), [Percentage(), Bar()]).start()
+            i = 0
             for word in group.dictionary.words:
                 self.weightedDictionary.searchAndAddWord(word)
+                i += 1
+                bar.update(i)
+            bar.finish()
+            print(f"Done adding weight from group {group.name}")
+
         
         print(f"Dizionario creato con {len(self.weightedDictionary.weightedWords)}")
         self.printWeightDictionaryDebugInfo()

@@ -17,7 +17,8 @@
       "type": "python",
       "request": "launch",
       "program": "${file}",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "args": ["-g", "8"],
     },
     {
       "name": "Python: launch default news group data",
