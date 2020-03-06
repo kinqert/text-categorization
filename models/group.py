@@ -1,4 +1,4 @@
-from models.word import Word, GroupedWord, Dictionary
+from models.word import CountedWord, GroupedWord, Dictionary
 
 from progressbar import ProgressBar, Percentage, Bar
 

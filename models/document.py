@@ -1,4 +1,4 @@
-from models.word import Word, Dictionary
+from models.word import CountedWord, Dictionary
 
 class Document:
     def __init__(self, name, path):
@@ -20,7 +20,7 @@ class Document:
         self.totalWords = len(self.readedWords)
         
         for word in self.readedWords:
-            self.dictionary.searchAndAddWord(Word(word))
+            self.dictionary.searchAndAddWord(CountedWord(word))
         
     
     def clearReadedWords(self):

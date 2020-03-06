@@ -1,4 +1,6 @@
-class Word:
+
+
+class CountedWord:
 
     def __init__(self, text, counted = 1):
         super().__init__()
@@ -10,7 +12,7 @@ class Word:
             self.counted += newWord.counted
             return self
 
-class GroupedWord(Word):
+class GroupedWord(CountedWord):
 
     def __init__(self, text, group, counted=1, documents=1):
         super().__init__(text, counted=counted)
@@ -49,6 +51,21 @@ class WeightedWordVector:
         
         self.groupVector.append(word)
 
+    def __add__(self, newWord):
+        if self.text != newWord.text:
+            return
+        
+        for newGroupedWord in newWord.groupVector:
+            groupMatch = False
+            for existedGroupWord in self.groupVector:
+                if newGroupedWord.group == existedGroupWord.group:
+                    existedGroupWord += newGroupedWord
+                    groupMatch = True
+            
+            if groupMatch is False:
+                self.groupVector.append(newGroupedWord)
+
+
     def __str__(self):
         
         ris = f"word: {self.text}, weights: ["
@@ -72,7 +89,7 @@ class Dictionary:
         super().__init__()
         self.words = []
 
-    def searchAndAddWord(self, newWord: Word):
+    def searchAndAddWord(self, newWord: CountedWord):
         if len(self.words) == 0:
             self.words.insert(0, newWord)
             return
@@ -82,22 +99,28 @@ class Dictionary:
         i = int((r - l) / 2)
         while True:
             if self.words[i].text == newWord.text:
-                self.words[i] += newWord
+                self.words[i] = __addWords__(self.words[i], newWord)
                 break
             elif self.words[i].text > newWord.text:
                 if (i - l) / 2 < 1:
-                    self.words.insert(i, newWord)
+                    self.__insertWords__(i, newWord)
                     break
                 else:    
                     r = i 
                     i = int(l + ((i - l) / 2))
             elif self.words[i].text < newWord.text:
                 if (r - i) / 2 < 1:
-                    self.words.insert(i + 1, newWord)
+                    self.__insertWords__(i + 1, newWord)
                     break
                 else:
                     l = i
                     i = int(i + ((r - i) / 2))
+    
+    def __addWords__(self, w1, w2):
+        return w1 + w2
+
+    def __insertWords__(self, index, newWord):
+        self.words.insert(index, newWord)
 
         
     def getSumOfCounted(self):
@@ -111,23 +134,13 @@ class Dictionary:
 class WeightedDictionary(Dictionary):
     def __init__(self):
         super().__init__()
-        self.weightedWords = []
     
-    def searchWord(self, text):
-        for word in self.weightedWords:
-            if word.text == text:
-                return word
-        
-        return None
-
-    def searchAndAddWord(self, newWord: GroupedWord):
-        existedWord = self.searchWord(newWord.text)
-
-        if existedWord is not None:
-                existedWord.addWeight(newWord)
-        else:
-            self.weightedWords.append(WeightedWordVector(newWord))
+    def __addWords__(self, w1, w2):
+        return w1.addWeight(w2)
     
+    def __insertWords__(self, index, newWord):
+        #TODO: Complete here
+
     def getSumOfCounted(self):
         ris = 0
 
