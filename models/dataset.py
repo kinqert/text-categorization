@@ -28,6 +28,7 @@ class Dataset:
         if self.datasetReaded is False:
             return
 
+        print("Creating weight")
         for group in self.trainGroups:
             for word in group.dictionary.words:
                 self.weightedDictionary.searchAndAddWord(word)

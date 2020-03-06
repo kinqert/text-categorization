@@ -11,11 +11,15 @@ class Document:
     def readWords(self):
         file = open(self.path, 'r', encoding="ISO-8859-1")
 
-        self.readedWords = file.readlines()
+        lines = file.readlines()
         
-        for word in self.readedWords:
-            self.readedWords += word.split()
+        for line in lines:
+            self.readedWords += line.split()
             
         
         for word in self.readedWords:
             self.dictionary.searchAndAddWord(Word(word))
+        
+    
+    def clearReadedWords(self):
+        self.readedWords = []
