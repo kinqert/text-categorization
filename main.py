@@ -10,7 +10,7 @@ from mbm import createVectors
 from log import printAndLog
 from result import plotWordsCountForAllDocuments
 from training import startTraining
-from saving import saveDataset
+from saving import saveDataset, loadDataset
 from dataloss import analyzeLostWords
 
 def main():
@@ -31,12 +31,8 @@ def loadOperations():
         elif arg == '-p':
             datasetPath = sys.argv[sys.argv.index(arg) + 1]
         elif arg == '--generate-tables' or arg == '-g':
-            dataset = createDataset(sys.argv[sys.argv.index(arg) + 1])
-            dataset.readDataset()
-            dataset.createDictionary()
-            analyzeLostWords(dataset)
-            #saveDataset(dataset)
-            #plotWordsCountForAllDocuments(dataset)
+            dataset = loadOrCreateDataset(sys.argv[sys.argv.index(arg) + 1])
+            plotWordsCountForAllDocuments(dataset)
         elif arg == '--show-datasets':
             printDatasets()
         elif arg == '--help':
@@ -45,6 +41,17 @@ def loadOperations():
 
     if datasetPath != "":
         importData(datasetPath, needToBeSplitted)
+
+def loadOrCreateDataset(name):
+    dataset = loadDataset(name)
+    if dataset is None:
+        dataset = createDataset(name)
+        dataset.readDataset()
+        dataset.createDictionary()
+        analyzeLostWords(dataset)
+        saveDataset(dataset)
+    
+    return dataset
 
 def printDatasets():
     table = PrettyTable()

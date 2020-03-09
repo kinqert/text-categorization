@@ -20,7 +20,18 @@ def saveDataset(dataset: Dataset):
         pickle.dump(dataset, file, pickle.HIGHEST_PROTOCOL)
 
 def loadDataset(name):
-    resultPath = f"{sys.path[0]}/data/{name}/save/{name}.pkl"
+
+    savedPath = f"{sys.path[0]}/data/{name}/save"
+    resultPath = f"{savedPath}/{name}.pkl"
+    
+    datasetFounded = False
+
+    for datasetSaved in os.listdir(savedPath):
+        if f"{name}.pkl" == datasetSaved:
+            datasetFounded = True
+
+    if datasetFounded == False:
+        return None
 
     with open(resultPath, "rb") as file:
         return pickle.load(file)
