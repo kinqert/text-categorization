@@ -1,17 +1,32 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, vsit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {"name":"Python: Current File (Integrated Terminal)","type":"python","request":"launch","program":"${file}","console":"integratedTerminal"},
-        {
-            "name": "Python: launch default news group data",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "args": ["-d", "~/data/20_newsgroups/"],
-            "console": "integratedTerminal"
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, vsit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Generate table dataset 8",
+      "type": "python",
+      "request": "launch",
+      "program": "main.py",
+      "args": ["-g", "8"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Current File (Integrated Terminal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "args": ["-g", "8"],
+    },
+    {
+      "name": "Python: launch default news group data",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "args": ["-d", "~/data/20_newsgroups/"],
+      "console": "integratedTerminal"
+    }
+  ]
 }

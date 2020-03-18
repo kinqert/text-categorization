@@ -1,7 +1,3 @@
-from threading import Thread, Event
-from time import sleep
-from queue import Queue
-
 import matplotlib.pyplot as plt
 
 from models.dataset import Dataset
@@ -15,15 +11,13 @@ def plotWordsCountForAllDocuments(dataset: Dataset):
     wordDocument = []
 
     words = []
-    wordQueue = Queue()
-    queueDone = Event()
     maxCountedWord: GroupedWord
     maxDocumentWord: GroupedWord
 
     for group in dataset.trainGroups:
-        print(f"group {group.name} words: {len(group.groupedWords)}")
+        print(f"group {group.name} words: {len(group.dictionary.words)}")
 
-        for word in group.groupedWords:
+        for word in group.dictionary.words:
             words.append(word)
 
     maxCounted = 0

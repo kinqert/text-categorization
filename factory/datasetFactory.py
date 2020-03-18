@@ -44,7 +44,6 @@ def createDocumentsForGroup(groupQueue: Queue):
         print(f"Creating group {group.name} for {group.type}...")
         nameDirs = os.listdir(group.path)
         print(f"Total documents for {group.name}-{group.type}: {len(nameDirs)}")
-        print(f"Dir list: {nameDirs}")
         for fileName in nameDirs:
             doc = Document(fileName, f"{group.path}/{fileName}")
             group.documents.append(doc)

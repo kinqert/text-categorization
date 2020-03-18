@@ -1,3 +1,10 @@
+from progressbar import ProgressBar, Percentage, Bar
+
+from models.word import WeightedWordVector, WeightedDictionary
+from models.group import Group
+
+from log import printAndLog, appendLog
+
 class Dataset:
 
     def __init__(self, datasetName):
@@ -10,7 +17,8 @@ class Dataset:
         self.testGroups = []
         self.dictionaryWords = []
         self.datasetReaded = False
-        self.wordWeight = []
+        self.weightedDictionary = WeightedDictionary()
+
     
     def readDataset(self):
         for group in self.trainGroups:
@@ -18,19 +26,30 @@ class Dataset:
         
         self.datasetReaded = True
     
-    
-
     def createDictionary(self):
         if self.datasetReaded is False:
             return
 
+        print("Creating weight")
         for group in self.trainGroups:
-            for word in group.groupedWords:
+            print(f"Adding weight from group {group.name}")
+            bar = ProgressBar(len(group.dictionary.words), [Percentage(), Bar()]).start()
+            i = 0
+            for word in group.dictionary.words:
+                self.weightedDictionary.searchAndAddWord(word)
+                i += 1
+                bar.update(i)
+            bar.finish()
+            print(f"Done adding weight from group {group.name}")
 
+        
+        print(f"Dizionario creato con {len(self.weightedDictionary.words)}")
+        self.printWeightDictionaryDebugInfo()
 
-
-
-
+    def printWeightDictionaryDebugInfo(self):
+        for wordWeight in self.weightedDictionary.words:
+            appendLog(f"{wordWeight}\n", "dataset-weight-vector")
+                
     def toString(self):
         string = f"Dataset: {self.name}\n"
 

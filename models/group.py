@@ -1,4 +1,6 @@
-from models.word import Word, GroupedWord
+from models.word import CountedWord, GroupedWord, Dictionary
+
+from progressbar import ProgressBar, Percentage, Bar
 
 class Group:
 
@@ -8,30 +10,24 @@ class Group:
         self.path = path
         self.type = type
 
+        self.dictionary = Dictionary()
         self.documents = []
-        self.groupedWords = []
     
     def readDocuments(self):
+        print(f"Start learning group {self.name}")
+        bar = ProgressBar(len(self.documents), [Percentage(), Bar()]).start()
+        i = 0
         for document in self.documents:
             document.readWords()
 
-            for word in document.words:
-                self.searchAndAddGroupedWord(GroupedWord(word.text, word.counted))
-        
-    def searchWord(self, text):
-        for word in self.groupedWords:
-            if word.text == text:
-                return word
-        
-        return None
+            for word in document.dictionary.words:
+                self.dictionary.searchAndAddWord(GroupedWord(word.text, self, word.counted))
+            
+            document.clearReadedWords()
+            i += 1
+            bar.update(i)
+        bar.finish()
+        print(f"Done learning group {self.name}")
 
-    def searchAndAddGroupedWord(self, word: GroupedWord):
-        existedWord = self.searchWord(word.text)
-
-        if existedWord is not None:
-            existedWord += word
-        else:
-            self.groupedWords.append(word)
-
-    def toString(self):
-        return f"Group: {self.name}, Type: {self.groupType},\nPath: {self.groupPath}, Documents: {len(self.documents)}\n"
+    def __str__(self):
+        return f"Group: {self.name}"

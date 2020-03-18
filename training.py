@@ -7,7 +7,7 @@ from queue import Queue
 
 from models.dataset import Dataset
 from models.group import Group
-from models.word import Word
+from models.word import CountedWord
 from models.document import Document
 from setting import Setting
 
@@ -56,5 +56,5 @@ def readDocuments(documentQueue: Queue):
             totalWords += words
         
         for word in totalWords:
-            document.searchAndAddWord(Word(word))
+            document.searchAndAddWord(CountedWord(word))
         sleep(0.0001)

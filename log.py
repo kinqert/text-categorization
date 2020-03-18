@@ -4,7 +4,7 @@ import sys
 def appendLog(messagge, name):
     createLogsFolderIfNotExist()
     logFile = open("logs/{}".format(name), "a")
-    logFile.write(messagge)
+    logFile.write(str(messagge))
     logFile.close
 
 def printAndLog(message, name):
