@@ -1,5 +1,3 @@
-
-
 class CountedWord:
 
     def __init__(self, text, counted = 1):
@@ -30,11 +28,6 @@ class GroupedWord(CountedWord):
 
 class WeightedWordVector:
 
-    def __init__(self, text):
-        super().__init__()
-        self.text = text
-        self.groupVector = []
-    
     def __init__(self, word: GroupedWord):
         super().__init__()
         self.text = word.text 
@@ -57,7 +50,7 @@ class WeightedWordVector:
             ris += f"{str(group)},"
         ris += "]"
 
-        return ris;
+        return ris
 
     def getSumOfCounted(self):
         ris = 0
