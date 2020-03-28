@@ -9,7 +9,7 @@ from shutil import copyfile
 
 # code for future replace of loadData
 
-# Input: datasetPath, splitted;
+# Input: datasetPath, splitted(need to be implementated);
 def startImport(datasetPath):
     path = createDestinationDir()
     createTestTrainDir(path)

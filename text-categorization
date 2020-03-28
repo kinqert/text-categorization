@@ -1,0 +1,15 @@
+selpath=$(pwd)
+arg=""
+
+for var in "$@"
+do
+    if [[ $var == "." ]]
+    then
+        arg="$arg $selpath"
+    else
+        arg="$arg $var"
+    fi
+done
+
+projpath=$(dirname "$0")
+python "$projpath/main.py" ${arg:1}

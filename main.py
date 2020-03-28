@@ -1,51 +1,21 @@
 import sys
 import os
+import argparse
 
 from prettytable import PrettyTable
 from shutil import copyfile, copytree
 
 from importing import startImport 
 from factory.datasetFactory import createDataset
-from mbm import createVectors
 from log import printAndLog
 from result import plotWordsCountForAllDocuments
-from training import startTraining
 from saving import saveDataset, loadDataset
 from dataloss import analyzeLostWords
 
-def main():
-    print('Welcome to Naive text classifier main program!')
-    print('developed by Lorenzo Adreani')
-
-    print('args: ', str(sys.argv))
-    loadOperations()
-
-def loadOperations():
-    needToBeSplitted = False
-    datasetPath = ""
-    dataset = None
-
-    for arg in sys.argv:
-        if arg == '-s':
-            needToBeSplitted = True
-        elif arg == '-p':
-            datasetPath = sys.argv[sys.argv.index(arg) + 1]
-        elif arg == '--generate-tables' or arg == '-g':
-            dataset = loadOrCreateDataset(sys.argv[sys.argv.index(arg) + 1])
-            plotWordsCountForAllDocuments(dataset)
-        elif arg == '--show-datasets':
-            printDatasets()
-        elif arg == '--help':
-            printHelp()
-            return
-
-    if datasetPath != "":
-        importData(datasetPath, needToBeSplitted)
-
-def loadOrCreateDataset(name):
-    dataset = loadDataset(name)
+def loadOrCreateDataset(args):
+    dataset = loadDataset(args.name)
     if dataset is None:
-        dataset = createDataset(name)
+        dataset = createDataset(args.name)
         dataset.readDataset()
         dataset.createDictionary()
         analyzeLostWords(dataset)
@@ -53,14 +23,18 @@ def loadOrCreateDataset(name):
     
     return dataset
 
-def printDatasets():
+def printDatasets(args):
+    if os.path.isdir("data") is False:
+        print('No datasets avaiable')
+        return
     table = PrettyTable()
     table.field_names = ["Datasets"]
     for file in os.listdir("data"):
         table.add_row(file)
     print(table)
 
-def importData(datasetPath, needToBeSplitted):
+def importData(args):
+    print(sys.path[0] + "/data")
     if os.path.isdir(sys.path[0] + "/data") is False:
         os.mkdir("data")
 
@@ -69,23 +43,44 @@ def importData(datasetPath, needToBeSplitted):
 
     totData = 0
 
-    for dir in os.listdir(datasetPath):
-        if os.path.isdir(datasetPath + dir):
-            nData= len(os.listdir(datasetPath + dir))
+    for dir in os.listdir(args.path):
+        if os.path.isdir(args.path + dir):
+            nData= len(os.listdir(args.path + dir))
             totData += nData
             x.add_row([dir, str(nData)])
     
     print(x)
     print("Dimension of dataset(in files):" + str(totData))
-    startImport(datasetPath)
+    startImport(args.path)
     print("Data imported!")
 
 
 def loadData(datasetPath):
     copytree(datasetPath, sys.path[0] + "/data-000001")
 
+commands = {
+    'import-data': importData,
+    'start-training' : loadOrCreateDataset,
+    'show-datasets' : printDatasets
+    }
 
-def printHelp():
-    print("Questo e' il menu di help")
+def main():
+    print('Welcome to Naive text classifier main program!')
+    print('developed by Lorenzo Adreani')
+    parser = argparse.ArgumentParser(prog='text-categorization',description="Text-categorization")
+
+    parser.add_argument('command', choices=commands.keys(), metavar='command', help=f'Commands avaiable: {str(commands.keys())}')
+    parser.add_argument('-s', '--split', default=False, const=True, action='store_const')
+    parser.add_argument('-p', '--path', nargs=1, metavar='dataset-path', help='Path to the folder of the dataset destination')
+    parser.add_argument('-n', '--name', nargs=1, type=str, metavar='dataset-name')
+
+    args = parser.parse_args()
+
+    print(args)
+    print(sys.argv)
+    print(os.path.curdir)
+
+    command = commands.get(args.command)
+    command(args) 
 
 main()
