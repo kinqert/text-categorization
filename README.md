@@ -9,7 +9,15 @@ Le seguenti dipendenze sono necessarie per il funzionamento del programma
 - PrettyTable
 - Progressbar
 
-
 ```bash
 pip install matplotlib progressbar PrettyTable
 ```
+
+## Argomenti
+
+### Comandi princpali
+
+- import-dataset: Importa un dataset
+  - -s | --split: il dataset viene diviso in due gruppi train e test con rapporto 80:20
+- start-training: Elabora i dati del dataset specificato
+- show-datasets: Mostra i dataset salvati

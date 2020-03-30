@@ -22,6 +22,9 @@ def saveDataset(dataset: Dataset):
 def loadDataset(name):
 
     savedPath = f"{sys.path[0]}/data/{name}/save"
+    if os.path.isdir(savedPath) is False:
+        return None
+
     resultPath = f"{savedPath}/{name}.pkl"
     
     datasetFounded = False
@@ -35,4 +38,3 @@ def loadDataset(name):
 
     with open(resultPath, "rb") as file:
         return pickle.load(file)
-    

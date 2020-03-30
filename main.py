@@ -1,91 +1,97 @@
 import sys
 import os
+import argparse
 
 from prettytable import PrettyTable
 from shutil import copyfile, copytree
 
-from importing import startImport 
+from importing import startImport
 from factory.datasetFactory import createDataset
-from mbm import createVectors
 from log import printAndLog
 from result import plotWordsCountForAllDocuments
-from training import startTraining
 from saving import saveDataset, loadDataset
 from dataloss import analyzeLostWords
+from util.colors import bcolors
 
-def main():
-    print('Welcome to Naive text classifier main program!')
-    print('developed by Lorenzo Adreani')
-
-    print('args: ', str(sys.argv))
-    loadOperations()
-
-def loadOperations():
-    needToBeSplitted = False
-    datasetPath = ""
-    dataset = None
-
-    for arg in sys.argv:
-        if arg == '-s':
-            needToBeSplitted = True
-        elif arg == '-p':
-            datasetPath = sys.argv[sys.argv.index(arg) + 1]
-        elif arg == '--generate-tables' or arg == '-g':
-            dataset = loadOrCreateDataset(sys.argv[sys.argv.index(arg) + 1])
-            plotWordsCountForAllDocuments(dataset)
-        elif arg == '--show-datasets':
-            printDatasets()
-        elif arg == '--help':
-            printHelp()
-            return
-
-    if datasetPath != "":
-        importData(datasetPath, needToBeSplitted)
-
-def loadOrCreateDataset(name):
-    dataset = loadDataset(name)
+def loadOrCreateDataset(args):
+    if args.name is None:
+        print(bcolors.FAIL + "Name must be provided!" + bcolors.ENDC)
+        return
+    dataset = loadDataset(args.name[0])
     if dataset is None:
-        dataset = createDataset(name)
+        dataset = createDataset(args.name[0])
         dataset.readDataset()
         dataset.createDictionary()
         analyzeLostWords(dataset)
         saveDataset(dataset)
-    
+        print(bcolors.OKGREEN + "Done learning!" + bcolors.ENDC)
+
     return dataset
 
-def printDatasets():
+
+def printDatasets(args):
+    dataDir = f"{sys.path[0]}/data"
+    if os.path.isdir(dataDir) is False:
+        print(bcolors.WARNING + "No datasets avaiable" + bcolors.ENDC)
+        return
     table = PrettyTable()
     table.field_names = ["Datasets"]
-    for file in os.listdir("data"):
-        table.add_row(file)
+    for file in os.listdir(dataDir):
+        table.add_row([file])
     print(table)
 
-def importData(datasetPath, needToBeSplitted):
-    if os.path.isdir(sys.path[0] + "/data") is False:
-        os.mkdir("data")
+
+def importData(args):
+    if args.path is None:
+        print(bcolors.FAIL + "Import path must be provided!" + bcolors.ENDC)
+    dataPath = sys.path[0] + "/data"
+    if os.path.isdir(dataPath) is False:
+        os.mkdir(dataPath)
 
     x = PrettyTable()
     x.field_names = ["Category", "#dirs"]
 
     totData = 0
-
-    for dir in os.listdir(datasetPath):
-        if os.path.isdir(datasetPath + dir):
-            nData= len(os.listdir(datasetPath + dir))
+    print(args.path[0])
+    for dir in os.listdir(args.path[0]):
+        if os.path.isdir(f"{args.path[0]}/{dir}"):
+            nData = len(os.listdir(f"{args.path[0]}/{dir}"))
             totData += nData
             x.add_row([dir, str(nData)])
-    
+
     print(x)
     print("Dimension of dataset(in files):" + str(totData))
-    startImport(datasetPath)
-    print("Data imported!")
+    startImport(args)
+    print(bcolors.OKGREEN + "Data imported!" + bcolors.ENDC)
 
 
 def loadData(datasetPath):
     copytree(datasetPath, sys.path[0] + "/data-000001")
 
 
-def printHelp():
-    print("Questo e' il menu di help")
+commands = {
+    'import-data': importData,
+    'start-training': loadOrCreateDataset,
+    'show-datasets': printDatasets
+}
+
+
+def main():
+    print('Welcome to Naive text classifier main program!')
+    print('developed by Lorenzo Adreani')
+    parser = argparse.ArgumentParser(prog='text-categorization', description="Text-categorization")
+
+    parser.add_argument('command', choices=commands.keys(), metavar='command',
+                        help=f'Commands avaiable: {str(commands.keys())}')
+    parser.add_argument('-s', '--split', default=False, const=True, action='store_const', help='Split the dataset path into train and test with 80:20 ratio')
+    parser.add_argument('-p', '--path', nargs=1, type=str, metavar='dataset-path',
+                        help='Path to the folder of the dataset destination; Needed for import-dataset')
+    parser.add_argument('-n', '--name', nargs=1, type=str, metavar='dataset-name', help='Name of the dataset selected; Needed for start-training')
+
+    args = parser.parse_args()
+
+    command = commands.get(args.command)
+    command(args)
+
 
 main()
