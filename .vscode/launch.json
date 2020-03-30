@@ -4,6 +4,7 @@
   // For more information, vsit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "name": "Python: Generate table dataset 8",
       "type": "python",
@@ -21,12 +22,20 @@
       "args": ["-g", "8"],
     },
     {
-      "name": "Python: launch default news group data",
+      "name": "Python: import news group data",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
-      "args": ["-d", "~/data/20_newsgroups/"],
+      "program": "${workspaceFolder}/main.py",
+      "args": ["import-data", "-p", "~/data/20_newsgroups/", "-s"],
       "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Show dataset",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": ["show-datasets"],
+      "console": "externalTerminal"
     }
   ]
 }

@@ -9,7 +9,6 @@ Le seguenti dipendenze sono necessarie per il funzionamento del programma
 - PrettyTable
 - Progressbar
 
-
 ```bash
 pip install matplotlib progressbar PrettyTable
 ```

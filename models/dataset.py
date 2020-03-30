@@ -1,3 +1,5 @@
+import sys
+
 from progressbar import ProgressBar, Percentage, Bar
 
 from models.word import WeightedWordVector, WeightedDictionary
@@ -10,8 +12,8 @@ class Dataset:
     def __init__(self, datasetName):
         super().__init__()
         self.name = datasetName
-        self.testPath = f"data/{datasetName}/test"
-        self.trainPath = f"data/{datasetName}/train"
+        self.testPath = f"{sys.path[0]}/data/{datasetName}/test"
+        self.trainPath = f"{sys.path[0]}/data/{datasetName}/train"
 
         self.trainGroups = []
         self.testGroups = []

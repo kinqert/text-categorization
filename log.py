@@ -3,7 +3,7 @@ import sys
 
 def appendLog(messagge, name):
     createLogsFolderIfNotExist()
-    logFile = open("logs/{}".format(name), "a")
+    logFile = open(f"{sys.path[0]}/logs/{name}", "a")
     logFile.write(str(messagge))
     logFile.close
 
@@ -13,7 +13,7 @@ def printAndLog(message, name):
 
 def createLogsFolderIfNotExist():
     if checkLogsFolder() == False:
-        os.mkdir("logs")
+        os.mkdir(f"{sys.path[0]}/logs")
 
 def checkLogsFolder():
-    return os.path.isdir("logs")
+    return os.path.isdir(f"{sys.path[0]}/logs")
