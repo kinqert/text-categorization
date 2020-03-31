@@ -1,4 +1,5 @@
 import sys
+import os
 
 from progressbar import ProgressBar, Percentage, Bar
 
@@ -19,7 +20,7 @@ class Dataset:
         self.testGroups = []
         self.dictionaryWords = []
         self.datasetReaded = False
-        self.weightedDictionary = WeightedDictionary()
+        self.weightedDictionary: WeightedDictionary
 
     
     def readDataset(self):
@@ -30,7 +31,9 @@ class Dataset:
     
     def createDictionary(self):
         if self.datasetReaded is False:
-            return
+            self.readDataset()
+
+        self.weightedDictionary = WeightedDictionary(self.trainGroups)
 
         print("Creating weight")
         for group in self.trainGroups:
@@ -44,7 +47,6 @@ class Dataset:
             bar.finish()
             print(f"Done adding weight from group {group.name}")
 
-        
         print(f"Dizionario creato con {len(self.weightedDictionary.words)}")
         self.printWeightDictionaryDebugInfo()
 

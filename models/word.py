@@ -1,6 +1,6 @@
 class CountedWord:
 
-    def __init__(self, text, counted = 1):
+    def __init__(self, text, counted=1):
         super().__init__()
         self.text = text
         self.counted = counted
@@ -28,10 +28,11 @@ class GroupedWord(CountedWord):
 
 class WeightedWordVector:
 
-    def __init__(self, word: GroupedWord):
+    def __init__(self, groups, word: GroupedWord):
         super().__init__()
         self.text = word.text 
         self.groupVector = []
+        self.groups = groups
 
         self.addWeight(word)
 
@@ -42,6 +43,24 @@ class WeightedWordVector:
                 return
         
         self.groupVector.append(word)
+
+    def getMBM(self):
+        weights = []
+        for group in self.groups:
+            weights.append(0)
+
+        for groupedWord in self.groupVector:
+            n = 1 + groupedWord.documents
+            d = 2 + len(groupedWord.group.documents)
+
+            groupPosition = -1
+            for i in range(0, len(self.groups) - 1):
+                if self.groups[i] == groupedWord.group:
+                    groupPosition = i
+                    break
+
+            weights[groupPosition] = n/d
+        return weights
 
     def __str__(self):
         
@@ -66,40 +85,42 @@ class Dictionary:
         super().__init__()
         self.words = []
 
-    def searchAndAddWord(self, newWord: CountedWord):
+    def searchWord(self, newWord: CountedWord):
         if len(self.words) == 0:
-            self.__insertWord__(0, newWord)
-            return
+            return False, 0
 
         l = 0
         r = len(self.words)
         i = int((r - l) / 2)
         while True:
             if self.words[i].text == newWord.text:
-                self.words[i] = self.__addWord__(self.words[i], newWord)
-                break
+                return True, i
             elif self.words[i].text > newWord.text:
                 if (i - l) / 2 < 1:
-                    self.__insertWord__(i, newWord)
-                    break
-                else:    
+                    return False, i
+                else:
                     r = i 
                     i = int(l + ((i - l) / 2))
             elif self.words[i].text < newWord.text:
                 if (r - i) / 2 < 1:
-                    self.__insertWord__(i + 1, newWord)
-                    break
+                    return False, i + 1
                 else:
                     l = i
                     i = int(i + ((r - i) / 2))
-    
+
+    def searchAndAddWord(self, newWord: CountedWord):
+        founded, index = self.searchWord(newWord)
+        if founded:
+            self.__addWord__(self.words[index], newWord)
+        else:
+            self.__insertWord__(index, newWord)
+
     def __addWord__(self, w1, w2):
         return w1 + w2
 
     def __insertWord__(self, index, newWord):
         self.words.insert(index, newWord)
 
-        
     def getSumOfCounted(self):
         ris = 0
 
@@ -109,8 +130,9 @@ class Dictionary:
         return ris
     
 class WeightedDictionary(Dictionary):
-    def __init__(self):
+    def __init__(self, groups):
         super().__init__()
+        self.groups = groups
     
     def __addWord__(self, w1, w2):
         w1.addWeight(w2)
@@ -119,6 +141,25 @@ class WeightedDictionary(Dictionary):
     def __insertWord__(self, index, newWord):
         self.words.insert(index, WeightedWordVector(newWord))
 
+    def getMBMWeight(self, dictionary: Dictionary):
+        resultWeight = []
+        for i in range(0, len(self.groups) - 1):
+                resultWeight.append(1)
+
+        for word in self.words:
+            wordWeights = word.getMBM()
+            wordExist, index = dictionary.searchWord(word)
+
+            if wordExist:
+                for i in range(0, len(resultWeight)):
+                    resultWeight[i] *= wordWeights[i]
+            else:
+                for i in range(0, len(resultWeight)):
+                    resultWeight[i] *= 1 - wordWeights[i]
+
+        return resultWeight
+
+
     def getSumOfCounted(self):
         ris = 0
 
@@ -126,3 +167,4 @@ class WeightedDictionary(Dictionary):
             ris += word.getSumOfCounted()
         
         return ris
+
