@@ -6,27 +6,27 @@
   "configurations": [
 
     {
-      "name": "Python: Generate table dataset 8",
+      "name": "Python: Start testing news",
       "type": "python",
       "request": "launch",
-      "program": "main.py",
-      "args": ["-g", "8"],
+      "program": "${workspaceFolder}/main.py",
+      "args": ["start-testing", "-n", "news"],
       "console": "integratedTerminal"
     },
     {
-      "name": "Python: Current File (Integrated Terminal)",
+      "name": "Python: Start training news",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "${workspaceFolder}/main.py",
       "console": "integratedTerminal",
-      "args": ["-g", "8"],
+      "args": ["start-training", "-n", "news"],
     },
     {
       "name": "Python: import news group data",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
-      "args": ["import-data", "-p", "~/data/20_newsgroups/", "-s"],
+      "args": ["import-data", "-p", "/home/lorenzo/data/20_newsgroups/", "-s", "-n", "news"],
       "console": "integratedTerminal"
     },
     {
@@ -35,7 +35,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
       "args": ["show-datasets"],
-      "console": "externalTerminal"
+      "console": "integratedTerminal"
     }
   ]
 }

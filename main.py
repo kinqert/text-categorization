@@ -14,20 +14,23 @@ from dataloss import analyzeLostWords
 from util.colors import bcolors
 
 def loadOrCreateDataset(args):
-    if args.name is None:
-        print(bcolors.FAIL + "Name must be provided!" + bcolors.ENDC)
-        return
     dataset = loadDataset(args.name[0])
     if dataset is None:
         dataset = createDataset(args.name[0])
-        dataset.readDataset()
-        dataset.createDictionary()
-        analyzeLostWords(dataset)
-        saveDataset(dataset)
-        print(bcolors.OKGREEN + "Done learning!" + bcolors.ENDC)
 
     return dataset
 
+def startTraining(args):
+    if args.name is None:
+        print(bcolors.FAIL + "Name must be provided!" + bcolors.ENDC)
+        return
+    dataset = loadOrCreateDataset(args)
+
+    dataset.readDataset()
+    dataset.createDictionary()
+    analyzeLostWords(dataset)
+    saveDataset(dataset)
+    print(bcolors.OKGREEN + "Done learning!" + bcolors.ENDC)
 
 def printDatasets(args):
     dataDir = f"{sys.path[0]}/data"
@@ -68,11 +71,26 @@ def importData(args):
 def loadData(datasetPath):
     copytree(datasetPath, sys.path[0] + "/data-000001")
 
+def startTesting(args):
+    if args.name is None:
+        print(bcolors.FAIL + "Name must be provided!" + bcolors.ENDC)
+        return
 
+    dataset = loadOrCreateDataset(args)
+
+    if dataset.datasetReaded is False:
+        print(bcolors.FAIL + f"Dataset must learned first!" + bcolors.ENDC)
+        return
+
+    accuracy = dataset.startMBMTest()
+    print(f"Done testing with accuracy {accuracy}")
+
+   
 commands = {
     'import-data': importData,
-    'start-training': loadOrCreateDataset,
-    'show-datasets': printDatasets
+    'start-training': startTraining,
+    'show-datasets': printDatasets,
+    'start-testing': startTesting
 }
 
 

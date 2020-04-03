@@ -14,14 +14,16 @@ class Group:
         self.documents = []
     
     def readDocuments(self):
-        print(f"Start learning group {self.name}")
+        self.dictionary.clean()
+
+        print(f"Start learning group {self.name}, type: {self.type}")
         bar = ProgressBar(len(self.documents), [Percentage(), Bar()]).start()
         i = 0
         for document in self.documents:
             document.readWords()
 
             for word in document.dictionary.words:
-                self.dictionary.searchAndAddWord(GroupedWord(word.text, self, word.counted))
+                self.dictionary.searchAndAddWord(GroupedWord(word.text, self, word.counted, 1))
             
             document.clearReadedWords()
             i += 1
