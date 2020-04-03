@@ -10,6 +10,8 @@ class Document:
         self.totalWords = 0
     
     def readWords(self):
+        self.dictionary.clean()
+
         file = open(self.path, 'r', encoding="ISO-8859-1")
 
         lines = file.readlines()

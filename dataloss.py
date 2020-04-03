@@ -13,11 +13,11 @@ def analyzeLostWords(dataset: Dataset):
         
         groupedCounted += group.dictionary.getSumOfCounted()
     
-    accuracy_in_1 = wordCounted      /   readedWordsCounted
-    accuracy_at_2 = groupedCounted   /   readedWordsCounted
-    accuracy_in_2 = groupedCounted   /   wordCounted       
-    accuracy_at_3 = weightCounted    /   readedWordsCounted
-    accuracy_in_3 = weightCounted    /   groupedCounted    
+    accuracy_in_1 = readedWordsCounted  /   wordCounted
+    accuracy_at_2 = readedWordsCounted  /   groupedCounted
+    accuracy_in_2 = wordCounted         /   groupedCounted       
+    accuracy_at_3 = readedWordsCounted  /   weightCounted
+    accuracy_in_3 = groupedCounted      /   weightCounted    
 
     print(f"losses in and at stage 1:   {(1 - accuracy_in_1) * 100}%")
     print(f"losses at stage 2:          {(1 - accuracy_at_2) * 100}%")

@@ -1,6 +1,29 @@
+import math
+
+from progressbar import ProgressBar, Percentage, Bar
+
+from util.colors import bcolors
+
+def isGTString(s1, s2):
+    isGT = False
+    ended = False
+    for i in range(0, len(min(s1, s2)) - 1):
+        if ord(s1[i]) < ord(s2[i]):
+            ended = True
+            break
+        elif ord(s1[i]) > ord(s2[i]):
+            ended = True
+            isGT = True
+            break
+    
+    if ended is False:
+        isGT = s1 == min(s1,s2)
+    
+    return isGT
+
 class CountedWord:
 
-    def __init__(self, text, counted = 1):
+    def __init__(self, text, counted=1):
         super().__init__()
         self.text = text
         self.counted = counted
@@ -28,12 +51,17 @@ class GroupedWord(CountedWord):
 
 class WeightedWordVector:
 
-    def __init__(self, word: GroupedWord):
+    def __init__(self, groups, word: GroupedWord):
         super().__init__()
         self.text = word.text 
         self.groupVector = []
+        self.groups = groups
 
         self.addWeight(word)
+        self.weights = []
+
+        for group in self.groups:
+            self.weights.append(0)
 
     def addWeight(self, word: GroupedWord):
         for groupedWord in self.groupVector:
@@ -42,6 +70,27 @@ class WeightedWordVector:
                 return
         
         self.groupVector.append(word)
+
+    def updateMBM(self):
+        badThing = False
+
+        for groupedWord in self.groupVector:
+            n = 1 + groupedWord.documents
+            d = 2 + len(groupedWord.group.documents)
+
+            groupPosition = -1
+            for i in range(0, len(self.groups) - 1):
+                if self.groups[i] == groupedWord.group:
+                    groupPosition = i
+                    break
+           
+            self.weights[groupPosition] = n/d
+        
+        for i in range(0, len(self.groups) - 1):
+            if self.weights[i] == 0:
+                self.weights[i] = 1 / (2 + len(self.groups[i].documents))
+        
+        return badThing
 
     def __str__(self):
         
@@ -66,40 +115,41 @@ class Dictionary:
         super().__init__()
         self.words = []
 
-    def searchAndAddWord(self, newWord: CountedWord):
+    def searchWord(self, text):
         if len(self.words) == 0:
-            self.__insertWord__(0, newWord)
-            return
+            return False, 0
 
         l = 0
-        r = len(self.words)
-        i = int((r - l) / 2)
-        while True:
-            if self.words[i].text == newWord.text:
-                self.words[i] = self.__addWord__(self.words[i], newWord)
-                break
-            elif self.words[i].text > newWord.text:
-                if (i - l) / 2 < 1:
-                    self.__insertWord__(i, newWord)
-                    break
-                else:    
-                    r = i 
-                    i = int(l + ((i - l) / 2))
-            elif self.words[i].text < newWord.text:
-                if (r - i) / 2 < 1:
-                    self.__insertWord__(i + 1, newWord)
-                    break
-                else:
-                    l = i
-                    i = int(i + ((r - i) / 2))
+        r = len(self.words) - 1
+        i = int((r + l) / 2)
+        while l <= r:
+            if self.words[i].text == text:
+                return True, i
+            elif self.words[i].text > text:
+                r = i - 1
+            else:
+                l = i + 1
+            i = int((r + l) / 2)
+
+        if self.words[i].text < text:
+            i += 1
+
+        return False, i
     
+
+    def searchAndAddWord(self, newWord: CountedWord):
+        founded, index = self.searchWord(newWord.text)
+        if founded:
+            self.__addWord__(self.words[index], newWord)
+        else:
+            self.__insertWord__(index, newWord)
+
     def __addWord__(self, w1, w2):
-        return w1 + w2
+        w1 = w1 + w2
 
     def __insertWord__(self, index, newWord):
         self.words.insert(index, newWord)
 
-        
     def getSumOfCounted(self):
         ris = 0
 
@@ -107,17 +157,53 @@ class Dictionary:
             ris += word.counted
         
         return ris
+
+    def clean(self):
+        self.words = []
     
 class WeightedDictionary(Dictionary):
-    def __init__(self):
+    def __init__(self, groups):
         super().__init__()
+        self.groups = groups
     
     def __addWord__(self, w1, w2):
         w1.addWeight(w2)
         return w1
     
     def __insertWord__(self, index, newWord):
-        self.words.insert(index, WeightedWordVector(newWord))
+        self.words.insert(index, WeightedWordVector(self.groups, newWord))
+
+    def getMBMWeight(self, dictionary: Dictionary):
+        resultWeight = []
+        for i in range(0, len(self.groups) - 1):
+                resultWeight.append(0)
+
+        for word in self.words:
+            wordWeights = word.weights
+            wordExist, index = dictionary.searchWord(word.text)
+
+            if wordExist:
+                for i in range(0, len(resultWeight)):
+                    resultWeight[i] -= math.log(wordWeights[i])
+            else:
+                for i in range(0, len(resultWeight)):
+                    resultWeight[i] -= math.log(1 - wordWeights[i])
+
+        return resultWeight
+    
+    def createMBMParameters(self):
+        print("Starting calculating parameters from the dictionary")
+        bar = ProgressBar(len(self.words), [Percentage(), Bar()]).start()
+        i = 0
+        badwords = []
+        for word in self.words:
+            badthing = word.updateMBM()
+            if badthing is True:
+                badwords.append(word)
+            i += 1
+            bar.update(i)
+        bar.finish()
+        print("Parameters created")
 
     def getSumOfCounted(self):
         ris = 0
@@ -126,3 +212,4 @@ class WeightedDictionary(Dictionary):
             ris += word.getSumOfCounted()
         
         return ris
+

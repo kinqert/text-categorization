@@ -36,5 +36,6 @@ def loadDataset(name):
     if datasetFounded == False:
         return None
 
+    print(f"Loading dataset {name}")
     with open(resultPath, "rb") as file:
         return pickle.load(file)
