@@ -1,0 +1,4 @@
+
+/*******Test-1*********/
+Dictionary created with 403066 words
+Done testing with accuracy 0.7214303575893973 => 72.14%

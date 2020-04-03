@@ -57,33 +57,36 @@ class Dataset:
         for wordWeight in self.weightedDictionary.words:
             appendLog(f"{wordWeight}\n", "dataset-weight-vector")
                 
+    
+    # Probably need multi-thread
     def startMBMTest(self):
         currentTestedFiles = 0
         correctPrediciton = 0
 
         for testGroup in self.testGroups:
             print(f"Testing file in group {testGroup.name}")
-            bar = ProgressBar(len(testGroup.documents), [Percentage(), Bar()]).start()
-            i = 0
+            totalTestFiles = len(testGroup.documents)
+            bar = ProgressBar(totalTestFiles, [Percentage(), Bar()]).start()
+            documentTested = 0
             for document in testGroup.documents:
                 weights = self.weightedDictionary.getMBMWeight(document.dictionary)
 
                 i = 0
                 groupPosition = 0
-                maxWeight = 0
+                minWeight = weights[0]
                 for weight in weights:
-                    if maxWeight < weight:
-                        maxWeight = weight
+                    if minWeight > weight:
+                        minWeight = weight
                         groupPosition = i
                     i += 1
                 
                 if self.trainGroups[groupPosition].name == testGroup.name:
                     correctPrediciton += 1
                 currentTestedFiles += 1
-                i += 1
-                bar.update(i)
-                print(f"Done testing group {testGroup.name}")
+                documentTested += 1
+                bar.update(documentTested)
             bar.finish()
+            print(f"Done testing group {testGroup.name}")
         
         return correctPrediciton / currentTestedFiles
     

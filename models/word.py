@@ -83,15 +83,8 @@ class WeightedWordVector:
                 if self.groups[i] == groupedWord.group:
                     groupPosition = i
                     break
-            
-            if n == d:
-                print(bcolors.WARNING + "Horrible thing happened" + bcolors.ENDC)
-                badThing = True
-            elif n > d:
-                print(bcolors.FAIL + "VERY Horrible thing happened" + bcolors.ENDC)
-                badThing = True
-            else:
-                self.weights[groupPosition] = n/d
+           
+            self.weights[groupPosition] = n/d
         
         for i in range(0, len(self.groups) - 1):
             if self.weights[i] == 0:
