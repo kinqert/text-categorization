@@ -1,4 +1,12 @@
 
 /*******Test-1*********/
 Dictionary created with 403066 words
-Done testing with accuracy 0.7214303575893973 => 72.14%
+Done testing with accuracy (MBM) 0.7214303575893973 => 72.14%
+
+/*******Test-2*********/
+Total word in dictionary: 403066
+MBM accuracy: 67.9169792448112%; MM accuracy: 71.7179294823706%
+
+/*******Test-3*********/
+Total word in dictionary: 403066
+MBM accuracy: 57.81445361340335%; MM accuracy: 71.7179294823706%

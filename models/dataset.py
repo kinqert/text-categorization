@@ -49,7 +49,9 @@ class Dataset:
             bar.finish()
             print(f"Done adding weight from group {group.name}")
 
-        self.weightedDictionary.createMBMParameters()
+        for group in self.trainGroups:
+            group.setDenominator(len(self.weightedDictionary.words))
+        self.weightedDictionary.createParameters()
 
         print(bcolors.OKGREEN + f"Dictionary created with {len(self.weightedDictionary.words)} words" + bcolors.ENDC)
 
@@ -59,9 +61,10 @@ class Dataset:
                 
     
     # Probably need multi-thread
-    def startMBMTest(self):
+    def startTest(self):
         currentTestedFiles = 0
-        correctPrediciton = 0
+        correctMBMPrediction = 0
+        correctMMPrediction = 0
 
         for testGroup in self.testGroups:
             print(f"Testing file in group {testGroup.name}")
@@ -69,26 +72,33 @@ class Dataset:
             bar = ProgressBar(totalTestFiles, [Percentage(), Bar()]).start()
             documentTested = 0
             for document in testGroup.documents:
-                weights = self.weightedDictionary.getMBMWeight(document.dictionary)
+                mbmWeights, mmWeights = self.weightedDictionary.getWeights(document.dictionary)
 
-                i = 0
-                groupPosition = 0
-                minWeight = weights[0]
-                for weight in weights:
-                    if minWeight > weight:
-                        minWeight = weight
-                        groupPosition = i
-                    i += 1
-                
-                if self.trainGroups[groupPosition].name == testGroup.name:
-                    correctPrediciton += 1
+                groupMBMPosition = 0
+                groupMMPosition = 0
+                minMBMWeight = mbmWeights[0]
+                minMMWeight = mmWeights[0]
+
+                for i in range(0, len(mbmWeights) - 1):
+                    if minMBMWeight > mbmWeights[i]:
+                        minMBMWeight = mbmWeights[i]
+                        groupMBMPosition = i
+                    if minMMWeight > mmWeights[i]:
+                        minMMWeight = mmWeights[i]
+                        groupMMPosition = i
+                    
+                if self.trainGroups[groupMBMPosition].name == testGroup.name:
+                    correctMBMPrediction += 1
+                if self.trainGroups[groupMMPosition].name == testGroup.name:
+                    correctMMPrediction += 1
+
                 currentTestedFiles += 1
                 documentTested += 1
                 bar.update(documentTested)
             bar.finish()
             print(f"Done testing group {testGroup.name}")
         
-        return correctPrediciton / currentTestedFiles
+        return correctMBMPrediction / currentTestedFiles, correctMMPrediction / currentTestedFiles
     
     def toString(self):
         string = f"Dataset: {self.name}\n"

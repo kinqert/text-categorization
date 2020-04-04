@@ -82,8 +82,10 @@ def startTesting(args):
         print(bcolors.FAIL + f"Dataset must learned first!" + bcolors.ENDC)
         return
 
-    accuracy = dataset.startMBMTest()
-    print(f"Done testing with accuracy {accuracy}")
+    accuracyMBM, accuracyMM = dataset.startTest()
+    print(bcolors.OKGREEN + "Done testing" + bcolors.ENDC)
+    print(f"Total word in dictionary: {len(dataset.weightedDictionary.words)}")
+    print(f"MBM accuracy: {accuracyMBM * 100}%; MM accuracy: {accuracyMM * 100}%")
 
    
 commands = {

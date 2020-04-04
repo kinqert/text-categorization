@@ -58,10 +58,12 @@ class WeightedWordVector:
         self.groups = groups
 
         self.addWeight(word)
-        self.weights = []
+        self.mbmWeights = []
+        self.mmWeights = []
 
         for group in self.groups:
-            self.weights.append(0)
+            self.mbmWeights.append(0)
+            self.mmWeights.append(0)
 
     def addWeight(self, word: GroupedWord):
         for groupedWord in self.groupVector:
@@ -71,26 +73,23 @@ class WeightedWordVector:
         
         self.groupVector.append(word)
 
-    def updateMBM(self):
-        badThing = False
-
+    def updateWeights(self):
         for groupedWord in self.groupVector:
-            n = 1 + groupedWord.documents
-            d = 2 + len(groupedWord.group.documents)
-
             groupPosition = -1
             for i in range(0, len(self.groups) - 1):
                 if self.groups[i] == groupedWord.group:
                     groupPosition = i
                     break
            
-            self.weights[groupPosition] = n/d
+            self.mbmWeights[groupPosition]  = (1 + groupedWord.documents)   / groupedWord.group.mbmDenominator
+            self.mmWeights[groupPosition]   = (1 + groupedWord.counted)     / groupedWord.group.mmDenominator
         
         for i in range(0, len(self.groups) - 1):
-            if self.weights[i] == 0:
-                self.weights[i] = 1 / (2 + len(self.groups[i].documents))
-        
-        return badThing
+            if self.mbmWeights[i] == 0:
+                self.mbmWeights[i]  = 1 / self.groups[i].mbmDenominator
+
+            if self.mmWeights[i] == 0:
+                self.mmWeights[i]   = 1 / self.groups[i].mmDenominator
 
     def __str__(self):
         
@@ -165,6 +164,10 @@ class WeightedDictionary(Dictionary):
     def __init__(self, groups):
         super().__init__()
         self.groups = groups
+        self.mbmStartWeights = []
+        
+        for group in self.groups:
+            self.mbmStartWeights.append(0)
     
     def __addWord__(self, w1, w2):
         w1.addWeight(w2)
@@ -173,33 +176,36 @@ class WeightedDictionary(Dictionary):
     def __insertWord__(self, index, newWord):
         self.words.insert(index, WeightedWordVector(self.groups, newWord))
 
-    def getMBMWeight(self, dictionary: Dictionary):
-        resultWeight = []
+    def getWeights(self, dictionary: Dictionary):
+        resultMBMWeights = []
+        resultMMWeights = []
+
         for i in range(0, len(self.groups) - 1):
-                resultWeight.append(0)
+            resultMBMWeights.append(self.mbmStartWeights[i])
+            resultMMWeights.append(0)
 
-        for word in self.words:
-            wordWeights = word.weights
-            wordExist, index = dictionary.searchWord(word.text)
+        for word in dictionary.words:
+            wordExist, index = self.searchWord(word.text)
 
-            if wordExist:
-                for i in range(0, len(resultWeight)):
-                    resultWeight[i] -= math.log(wordWeights[i])
-            else:
-                for i in range(0, len(resultWeight)):
-                    resultWeight[i] -= math.log(1 - wordWeights[i])
+            #TODO: Add here speed improvement
+            for i in range(0, len(resultMBMWeights)):
+                if wordExist:
+                    wordVector = self.words[index]
+                    resultMBMWeights[i] -= math.log(wordVector.mbmWeights[i]) + math.log(1 - wordVector.mbmWeights[i])
 
-        return resultWeight
+                    wordCount = dictionary.words[i].counted
+                    resultMMWeights[i] -= wordCount * math.log(wordVector.mmWeights[i]) - math.log(math.factorial(wordCount)) 
+
+        return resultMBMWeights, resultMMWeights
     
-    def createMBMParameters(self):
+    def createParameters(self):
         print("Starting calculating parameters from the dictionary")
         bar = ProgressBar(len(self.words), [Percentage(), Bar()]).start()
         i = 0
-        badwords = []
         for word in self.words:
-            badthing = word.updateMBM()
-            if badthing is True:
-                badwords.append(word)
+            word.updateWeights()
+            for j in range(0, len(self.mbmStartWeights) - 1):
+                self.mbmStartWeights[j] -= math.log(1 - word.mbmWeights[j])
             i += 1
             bar.update(i)
         bar.finish()

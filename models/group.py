@@ -12,6 +12,9 @@ class Group:
 
         self.dictionary = Dictionary()
         self.documents = []
+
+        self.mbmDenominator: float
+        self.mmDenominator: float
     
     def readDocuments(self):
         self.dictionary.clean()
@@ -30,6 +33,14 @@ class Group:
             bar.update(i)
         bar.finish()
         print(f"Done learning group {self.name}")
+
+    def setDenominator(self, dictionaryLenght):
+        self.mbmDenominator = 2 + len(self.documents)
+        # Can be the len dictionary of the group?
+        self.mmDenominator = dictionaryLenght
+        
+        for word in self.dictionary.words:
+            self.mmDenominator += word.counted
 
     def __str__(self):
         return f"Group: {self.name}"
