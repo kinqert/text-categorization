@@ -76,7 +76,7 @@ class WeightedWordVector:
     def updateWeights(self):
         for groupedWord in self.groupVector:
             groupPosition = -1
-            for i in range(0, len(self.groups) - 1):
+            for i in range(0, len(self.groups)):
                 if self.groups[i] == groupedWord.group:
                     groupPosition = i
                     break
@@ -84,7 +84,7 @@ class WeightedWordVector:
             self.mbmWeights[groupPosition]  = (1 + groupedWord.documents)   / groupedWord.group.mbmDenominator
             self.mmWeights[groupPosition]   = (1 + groupedWord.counted)     / groupedWord.group.mmDenominator
         
-        for i in range(0, len(self.groups) - 1):
+        for i in range(0, len(self.groups)):
             if self.mbmWeights[i] == 0:
                 self.mbmWeights[i]  = 1 / self.groups[i].mbmDenominator
 
@@ -180,7 +180,7 @@ class WeightedDictionary(Dictionary):
         resultMBMWeights = []
         resultMMWeights = []
 
-        for i in range(0, len(self.groups) - 1):
+        for i in range(0, len(self.groups)):
             resultMBMWeights.append(self.mbmStartWeights[i])
             resultMMWeights.append(0)
 
@@ -188,8 +188,8 @@ class WeightedDictionary(Dictionary):
             wordExist, index = self.searchWord(word.text)
 
             #TODO: Add here speed improvement
-            for i in range(0, len(resultMBMWeights)):
-                if wordExist:
+            if wordExist:
+                for i in range(0, len(resultMBMWeights)):
                     wordVector = self.words[index]
                     resultMBMWeights[i] -= math.log(wordVector.mbmWeights[i]) + math.log(1 - wordVector.mbmWeights[i])
 
@@ -204,7 +204,7 @@ class WeightedDictionary(Dictionary):
         i = 0
         for word in self.words:
             word.updateWeights()
-            for j in range(0, len(self.mbmStartWeights) - 1):
+            for j in range(0, len(self.mbmStartWeights)):
                 self.mbmStartWeights[j] -= math.log(1 - word.mbmWeights[j])
             i += 1
             bar.update(i)

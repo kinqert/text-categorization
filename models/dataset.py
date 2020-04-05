@@ -79,7 +79,7 @@ class Dataset:
                 minMBMWeight = mbmWeights[0]
                 minMMWeight = mmWeights[0]
 
-                for i in range(0, len(mbmWeights) - 1):
+                for i in range(0, len(mbmWeights)):
                     if minMBMWeight > mbmWeights[i]:
                         minMBMWeight = mbmWeights[i]
                         groupMBMPosition = i

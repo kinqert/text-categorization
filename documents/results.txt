@@ -12,6 +12,10 @@ MBM accuracy: 67.9169792448112%; MM accuracy: 71.7179294823706%
 Total word in dictionary: 403066
 MBM accuracy: 57.81445361340335%; MM accuracy: 71.7179294823706%
 
+/*******Test-4(first fix)*********/
+Total word in dictionary: 403066
+MBM accuracy: 64.29107276819205%; MM accuracy: 79.2198049512378%
+
 /*******News-import-2********/
 /*******Test-1*********/
 Total word in dictionary: 394888

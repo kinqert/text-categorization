@@ -19,7 +19,7 @@ class Group:
     def readDocuments(self):
         self.dictionary.clean()
 
-        print(f"Start learning group {self.name}, type: {self.type}")
+        print(f"Start reading group {self.name}, type: {self.type}")
         bar = ProgressBar(len(self.documents), [Percentage(), Bar()]).start()
         i = 0
         for document in self.documents:
@@ -32,7 +32,7 @@ class Group:
             i += 1
             bar.update(i)
         bar.finish()
-        print(f"Done learning group {self.name}")
+        print(f"Done reading group {self.name}")
 
     def setDenominator(self, dictionaryLenght):
         self.mbmDenominator = 2 + len(self.documents)
