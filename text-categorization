@@ -12,4 +12,4 @@ do
 done
 
 projpath=$(dirname "$0")
-python "$projpath/main.py" ${arg:1}
+python3 "$projpath/main.py" ${arg:1}
