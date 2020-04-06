@@ -28,7 +28,7 @@ def startTraining(args):
 
     dataset.readDataset()
     dataset.createDictionary()
-    analyzeLostWords(dataset)
+    #analyzeLostWords(dataset)
     saveDataset(dataset)
     print(bcolors.OKGREEN + "Done learning!" + bcolors.ENDC)
 
@@ -83,9 +83,6 @@ def startTesting(args):
         return
 
     accuracyMBM, accuracyMM = dataset.startTest()
-    print(bcolors.OKGREEN + "Done testing" + bcolors.ENDC)
-    print(f"Total word in dictionary: {len(dataset.weightedDictionary.words)}")
-    print(f"MBM accuracy: {accuracyMBM * 100}%; MM accuracy: {accuracyMM * 100}%")
 
    
 commands = {

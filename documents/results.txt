@@ -16,6 +16,21 @@ MBM accuracy: 57.81445361340335%; MM accuracy: 71.7179294823706%
 Total word in dictionary: 403066
 MBM accuracy: 64.29107276819205%; MM accuracy: 79.2198049512378%
 
+Done testing - fix 2
+Total word in MBM dictionary: 403066
+Total word in MM dictionary: 403066
+MBM accuracy: 64.29107276819205%; MM accuracy: 83.3208302075519%
+
+Done testing - fix 2 cleaned Dictionary
+Total word in MBM dictionary: 149198
+Total word in MM dictionary: 163290
+MBM accuracy: 62.815703925981495%; MM accuracy: 82.52063015753939%
+
+Done testing - fixed mbm
+Total word in MBM dictionary: 149198
+Total word in MM dictionary: 163290
+MBM accuracy: 76.51912978244562%; MM accuracy: 82.52063015753939%
+
 /*******News-import-2********/
 /*******Test-1*********/
 Total word in dictionary: 394888

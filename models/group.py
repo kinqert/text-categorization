@@ -1,4 +1,5 @@
-from models.word import CountedWord, GroupedWord, Dictionary
+from models.word import CountedWord, GroupedWord
+from models.dictionary import Dictionary
 
 from progressbar import ProgressBar, Percentage, Bar
 
@@ -13,8 +14,7 @@ class Group:
         self.dictionary = Dictionary()
         self.documents = []
 
-        self.mbmDenominator: float
-        self.mmDenominator: float
+        self.totalCountedWords = 0
     
     def readDocuments(self):
         self.dictionary.clean()
@@ -31,16 +31,14 @@ class Group:
             document.clearReadedWords()
             i += 1
             bar.update(i)
+        self.setTotalCountedWords()
         bar.finish()
         print(f"Done reading group {self.name}")
-
-    def setDenominator(self, dictionaryLenght):
-        self.mbmDenominator = 2 + len(self.documents)
-        # Can be the len dictionary of the group?
-        self.mmDenominator = dictionaryLenght
         
+    def setTotalCountedWords(self):
+        self.totalCountedWords = 0
         for word in self.dictionary.words:
-            self.mmDenominator += word.counted
+            self.totalCountedWords += word.counted
 
     def __str__(self):
         return f"Group: {self.name}"

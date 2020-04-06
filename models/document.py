@@ -1,4 +1,5 @@
-from models.word import CountedWord, Dictionary
+from models.word import CountedWord
+from models.dictionary import Dictionary
 
 class Document:
     def __init__(self, name, path):
