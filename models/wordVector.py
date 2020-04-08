@@ -41,12 +41,18 @@ class WeightedWordVector:
 
         return ris
 
+    def getSumOfDocuments(self):
+        ris = 0
+        for word in self.groupVector:
+            if word is not None:
+                ris += word.documents
+        return ris
+
     def getSumOfCounted(self):
         ris = 0
-
         for word in self.groupVector:
-            ris += word.counted
-
+            if word is not None:
+                ris += word.counted
         return ris
 
 class MBMWeightedWordVector(WeightedWordVector):

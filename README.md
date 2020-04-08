@@ -5,12 +5,13 @@ Progetto per il corso di AI per l'università degli studi di Firenze
 ## Dipendenze
 
 Le seguenti dipendenze sono necessarie per il funzionamento del programma
+- Sklearn
 - Matplotlib
 - PrettyTable
 - Progressbar
 
 ```bash
-pip install matplotlib progressbar PrettyTable
+pip install sklearn matplotlib progressbar PrettyTable
 ```
 
 ## Argomenti

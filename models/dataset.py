@@ -8,6 +8,7 @@ from models.weightedDictionary import WeightedDictionary, MBMWeightedDictionary,
 from models.group import Group
 from util.colors import bcolors
 from log import printAndLog, appendLog
+from models.test import Test
 
 class Dataset:
 
@@ -23,6 +24,9 @@ class Dataset:
         self.datasetReaded = False
         self.mmWeightedDictionary: MMWeightedDictionary
         self.mbmWeightedDictionary: MBMWeightedDictionary
+
+        self.resultMBMTest = []
+        self.resultMMTest = []
 
     
     def readDataset(self):
@@ -54,6 +58,9 @@ class Dataset:
             bar.finish()
             print(f"Done adding weight from group {group.name}")
 
+        self.mmWeightedDictionary.cleanDictionary()
+        self.mbmWeightedDictionary.cleanDictionary()
+
         self.mmWeightedDictionary.createParameters()
         self.mbmWeightedDictionary.createParameters()
 
@@ -61,16 +68,9 @@ class Dataset:
         print(bcolors.OKGREEN + f"Dictionary MM created with {len(self.mmWeightedDictionary.words)} words" + bcolors.ENDC)
 
     # Probably need multi-thread
-    def startTest(self):
+    def startTest(self, maxLength = -1):
         #TODO: Add clean here
-        cleanMBMDictionary = self.mbmWeightedDictionary.getCopy()
-        cleanMMDictionary = self.mmWeightedDictionary.getCopy()
-
-        cleanMBMDictionary.cleanDictionary()
-        cleanMMDictionary.cleanDictionary()
-
-        cleanMBMDictionary.createParameters()
-        cleanMBMDictionary.createParameters()
+        mbmDictionary, mmDictionary = self.__setSelectFeature__(maxLength)
 
         currentTestedFiles = 0
         correctMBMPrediction = 0
@@ -82,8 +82,8 @@ class Dataset:
             bar = ProgressBar(totalTestFiles, [Percentage(), Bar()]).start()
             documentTested = 0
             for document in testGroup.documents:
-                mbmWeights = cleanMBMDictionary.classifyDictionary(document.dictionary)
-                mmWeights = cleanMMDictionary.classifyDictionary(document.dictionary)
+                mbmWeights = mbmDictionary.classifyDictionary(document.dictionary)
+                mmWeights = mmDictionary.classifyDictionary(document.dictionary)
 
                 groupMBMPosition = 0
                 groupMMPosition = 0
@@ -112,12 +112,40 @@ class Dataset:
         accuracyMBM = correctMBMPrediction / currentTestedFiles
         accuracyMM = correctMMPrediction / currentTestedFiles
 
+        mbmTest = Test("MBM", len(mbmDictionary.words), accuracyMBM)
+        self.resultMBMTest.append(mbmTest)
+
+        mmTest = Test("MM", len(mmDictionary.words), accuracyMM)
+        self.resultMMTest.append(mmTest)
+
         print(bcolors.OKGREEN + "Done testing" + bcolors.ENDC)
-        print(f"Total word in MBM dictionary: {len(cleanMBMDictionary.words)}")
-        print(f"Total word in MM dictionary: {len(cleanMMDictionary.words)}")
-        print(f"MBM accuracy: {accuracyMBM * 100}%; MM accuracy: {accuracyMM * 100}%")
         
-        return accuracyMBM, accuracyMM
+        return mbmTest, mmTest 
+
+    def __setSelectFeature__(self, maxLength):
+        if maxLength == -1:
+            return self.mbmWeightedDictionary, self.mmWeightedDictionary
+
+        cleanMBMDictionary = self.mbmWeightedDictionary.getCopy()
+        cleanMMDictionary = self.mmWeightedDictionary.getCopy()
+
+        cleanMBMDictionary.featureSelection(maxLength,)
+        cleanMMDictionary.featureSelection(maxLength)
+
+        cleanMBMDictionary.createParameters()
+        cleanMBMDictionary.createParameters()
+
+        return cleanMBMDictionary, cleanMMDictionary
+
+    def cleanTest(self):
+        self.resultMBMTest = []
+        self.resultMMTest = []
+    
+    def getTotalTrainDocuments(self):
+        ris = 0
+        for group in self.trainGroups:
+            ris += len(group.documents)
+        return ris
     
     def toString(self):
         string = f"Dataset: {self.name}\n"

@@ -57,3 +57,33 @@ def plotWordsCountForAllDocuments(dataset: Dataset):
     plt.show()
 
     print("Plot created")
+
+def plotTestResult(dataset):
+    plt.style.use('dark_background')
+    mbm = []
+    for mbmTest in dataset.resultMBMTest:
+        mbm.append([mbmTest.lenDictionary, mbmTest.accuracy])
+    mm = []
+    for mmTest in dataset.resultMMTest:
+        mm.append([mmTest.lenDictionary, mmTest.accuracy])
+
+    mbm.sort(key=lambda tup:tup[0])
+    mm.sort(key=lambda tup:tup[0])
+
+    mbmY = []
+    mbmX = []
+    mmY = []
+    mmX = []
+
+    for test in mbm:
+        mbmX.append(test[0])
+        mbmY.append(test[1] * 100)
+    for test in mm:
+        mmX.append(test[0])
+        mmY.append(test[1] * 100)
+
+
+    plt.plot(mbmX, mbmY, "ro", mbmX, mbmY, "r-", mmX, mmY, "b^", mmX, mmY, "b-")
+    plt.title(dataset.name)
+    plt.xscale("log")
+    plt.show()

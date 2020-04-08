@@ -1,3 +1,5 @@
+from sklearn.feature_extraction.text import CountVectorizer
+
 from models.word import CountedWord
 from models.dictionary import Dictionary
 
@@ -18,12 +20,17 @@ class Document:
         lines = file.readlines()
         
         for line in lines:
-            self.readedWords += line.split()
-            
+            if line.startswith("Newsgroups:"):
+                lines.remove(line)
+        vectorizer = CountVectorizer()
+        x = vectorizer.fit_transform(lines)
+        self.readedWords = vectorizer.get_feature_names()    
         self.totalWords = len(self.readedWords)
         
-        for word in self.readedWords:
-            self.dictionary.searchAndAddWord(CountedWord(word))
+        for arrayLine in x.toarray():
+            for i in range(0, len(arrayLine)):
+                if arrayLine[i] != 0:
+                    self.dictionary.searchAndAddWord(CountedWord(self.readedWords[i], arrayLine[i]))
         
     
     def clearReadedWords(self):

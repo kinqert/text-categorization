@@ -4,13 +4,29 @@
   // For more information, vsit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
     {
-      "name": "Python: Start testing news",
+      "name": "Python: Show dataset",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
-      "args": ["start-testing", "-n", "news"],
+      "args": [
+        "show-datasets"
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: import news group data",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "import-data",
+        "-p",
+        "/home/lorenzo/data/20_newsgroups/",
+        "-s",
+        "-n",
+        "news"
+      ],
       "console": "integratedTerminal"
     },
     {
@@ -19,22 +35,62 @@
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
       "console": "integratedTerminal",
-      "args": ["start-training", "-n", "news"],
+      "args": [
+        "start-training",
+        "-n",
+        "news"
+      ],
     },
     {
-      "name": "Python: import news group data",
+      "name": "Python: Start testing news",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
-      "args": ["import-data", "-p", "/home/lorenzo/data/20_newsgroups/", "-s", "-n", "news"],
+      "args": [
+        "start-testing",
+        "-n",
+        "news"
+      ],
       "console": "integratedTerminal"
     },
     {
-      "name": "Python: Show dataset",
+      "name": "Python: Start feature testing news",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
-      "args": ["show-datasets"],
+      "args": [
+        "start-testing",
+        "-n",
+        "news",
+        "-fl",
+        "20",
+        "50",
+        "100",
+        "200",
+        "500",
+        "700",
+        "1000",
+        "2000",
+        "5000",
+        "7000",
+        "10000",
+        "20000",
+        "50000",
+        "70000",
+        "-1",
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Plot result news",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "plot-result",
+        "-n",
+        "news"
+      ],
       "console": "integratedTerminal"
     }
   ]

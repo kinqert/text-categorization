@@ -8,10 +8,11 @@ from shutil import copyfile, copytree
 from importing import startImport
 from factory.datasetFactory import createDataset
 from log import printAndLog
-from result import plotWordsCountForAllDocuments
+from result import plotWordsCountForAllDocuments, plotTestResult
 from saving import saveDataset, loadDataset
 from dataloss import analyzeLostWords
 from util.colors import bcolors
+from models.test import Test
 
 def loadOrCreateDataset(args):
     dataset = loadDataset(args.name[0])
@@ -81,15 +82,42 @@ def startTesting(args):
     if dataset.datasetReaded is False:
         print(bcolors.FAIL + f"Dataset must learned first!" + bcolors.ENDC)
         return
+    
+    testLengths = []
+    if args.feature_length is None:
+        testLengths.append(-1)
+    else:
+        testLengths = args.feature_length
+    
+    dataset.cleanTest()
+    testResults = []
 
-    accuracyMBM, accuracyMM = dataset.startTest()
+    for featureLength in testLengths:
+        mbmTest, mmTest = dataset.startTest(featureLength)
+        testResults.append(mbmTest)
+        testResults.append(mmTest)
+    
+    print(bcolors.OKGREEN + "Testing done!" + bcolors.ENDC)
+    for test in testResults:
+        print(str(test))
+    
+    saveDataset(dataset)
+
+def plotResult(args):
+    if args.name is None:
+        print(bcolors.FAIL + "Name must be provided!" + bcolors.ENDC)
+        return
+
+    dataset = loadOrCreateDataset(args)
+    plotTestResult(dataset)
 
    
 commands = {
     'import-data': importData,
     'start-training': startTraining,
     'show-datasets': printDatasets,
-    'start-testing': startTesting
+    'start-testing': startTesting,
+    'plot-result': plotResult
 }
 
 
@@ -104,6 +132,7 @@ def main():
     parser.add_argument('-p', '--path', nargs=1, type=str, metavar='dataset-path',
                         help='Path to the folder of the dataset destination; Needed for import-dataset')
     parser.add_argument('-n', '--name', nargs=1, type=str, metavar='dataset-name', help='Name of the dataset selected; Needed for start-training')
+    parser.add_argument('-fl', '--feature-length', nargs='+', type=int, metavar='feature-length', help='Choose the length of vocabulary for test')
 
     args = parser.parse_args()
 
