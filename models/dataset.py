@@ -58,18 +58,16 @@ class Dataset:
             bar.finish()
             print(f"Done adding weight from group {group.name}")
 
-        self.mmWeightedDictionary.cleanDictionary()
         self.mbmWeightedDictionary.cleanDictionary()
+        self.mmWeightedDictionary.cleanDictionary()
 
-        self.mmWeightedDictionary.createParameters()
         self.mbmWeightedDictionary.createParameters()
+        self.mmWeightedDictionary.createParameters()
 
         print(bcolors.OKGREEN + f"Dictionary MBM created with {len(self.mbmWeightedDictionary.words)} words" + bcolors.ENDC)
         print(bcolors.OKGREEN + f"Dictionary MM created with {len(self.mmWeightedDictionary.words)} words" + bcolors.ENDC)
 
-    # Probably need multi-thread
     def startTest(self, maxLength = -1):
-        #TODO: Add clean here
         mbmDictionary, mmDictionary = self.__setSelectFeature__(maxLength)
 
         currentTestedFiles = 0
@@ -79,7 +77,7 @@ class Dataset:
         for testGroup in self.testGroups:
             print(f"Testing file in group {testGroup.name}")
             totalTestFiles = len(testGroup.documents)
-            bar = ProgressBar(totalTestFiles, [Percentage(), Bar()]).start()
+            bar = ProgressBar(totalTestFiles, [Percentage(), Bar( marker='█')]).start()
             documentTested = 0
             for document in testGroup.documents:
                 mbmWeights = mbmDictionary.classifyDictionary(document.dictionary)
@@ -129,11 +127,11 @@ class Dataset:
         cleanMBMDictionary = self.mbmWeightedDictionary.getCopy()
         cleanMMDictionary = self.mmWeightedDictionary.getCopy()
 
-        cleanMBMDictionary.featureSelection(maxLength,)
+        cleanMBMDictionary.featureSelection(maxLength)
         cleanMMDictionary.featureSelection(maxLength)
 
         cleanMBMDictionary.createParameters()
-        cleanMBMDictionary.createParameters()
+        cleanMMDictionary.createParameters()
 
         return cleanMBMDictionary, cleanMMDictionary
 

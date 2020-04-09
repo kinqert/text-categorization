@@ -83,7 +83,8 @@ def plotTestResult(dataset):
         mmY.append(test[1] * 100)
 
 
-    plt.plot(mbmX, mbmY, "ro", mbmX, mbmY, "r-", mmX, mmY, "b^", mmX, mmY, "b-")
+    plt.plot(mbmX, mbmY, "ro-", mmX, mmY, "b^-")
+    plt.ylim(0, 100)
     plt.title(dataset.name)
     plt.xscale("log")
     plt.show()
