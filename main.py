@@ -131,7 +131,7 @@ def main():
 
     parser.add_argument('command', choices=commands.keys(), metavar='command',
                         help=f'Commands avaiable: {str(commands.keys())}')
-    parser.add_argument('-s', '--split', default=False, const=True, action='store_const', help='Split the dataset path into train and test with 80:20 ratio')
+    parser.add_argument('-s', '--split', nargs='?', const=0.2, type=float, help='Split the dataset path into train and test default ratio 0.2 (80:20)')
     parser.add_argument('-p', '--path', nargs=1, type=str, metavar='dataset-path',
                         help='Path to the folder of the dataset destination; Needed for import-dataset')
     parser.add_argument('-n', '--name', nargs=1, type=str, metavar='dataset-name', help='Name of the dataset selected; Needed for start-training')

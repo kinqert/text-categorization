@@ -160,9 +160,6 @@ class MBMWeightedDictionary(WeightedDictionary):
             self.totalClassWords[i] = len(self.groups[i].documents)
 
     def __getMutualInformationArray__(self):
-        totalDocuments = 0
-        for group in self.groups:
-            totalDocuments += len(group.documents)
         mutualInformation = []
 
         print(f"Calculating mutual information for {self.__strTypeDictionary__()}")
@@ -180,14 +177,14 @@ class MBMWeightedDictionary(WeightedDictionary):
 
                 C = len(self.groups[i].documents)
     
-                n1 = A * totalDocuments
-                n0 = (C - A) * totalDocuments
+                n1 = A * self.totalWords
+                n0 = (C - A) * self.totalWords
                 d1 = B * C
-                d0 = (totalDocuments - B) * C
+                d0 = (self.totalWords - B) * C
                 if A != 0:
-                    mi += (A/totalDocuments) * math.log(n1/d1) 
-                #if C - A != 0:
-                #    mi += ((C-A) / totalDocuments) * math.log(n0/d0)
+                    mi += (A/self.totalWords) * math.log(n1/d1) 
+                if C - A != 0:
+                    mi += ((C-A) / self.totalWords) * math.log(n0/d0)
 
             mutualInformation.append([mi, wordVector])
             j += 1
@@ -232,7 +229,6 @@ class MMWeightedDictionary(WeightedDictionary):
 
     def __getMutualInformationArray__(self):
         mutualInformation = []
-        self.__setUpTotalWordsCount__()
 
         print(f"Calculating mutual information for {self.__strTypeDictionary__()}")
         bar = defaultProgress(len(self.words)).start()

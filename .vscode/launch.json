@@ -15,7 +15,7 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "Python: import news group data",
+      "name": "Python: import news group data default (80:20)",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
@@ -30,6 +30,38 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "Python: import news group data (90:10)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "import-data",
+        "-p",
+        "/home/lorenzo/data/20_newsgroups/",
+        "-s",
+        "0.1",
+        "-n",
+        "news10"
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: import news group data (70:30)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "import-data",
+        "-p",
+        "/home/lorenzo/data/20_newsgroups/",
+        "-s",
+        "0.3",
+        "-n",
+        "news30"
+      ],
+      "console": "integratedTerminal"
+    },
+    {
       "name": "Python: Start training news",
       "type": "python",
       "request": "launch",
@@ -39,6 +71,30 @@
         "start-training",
         "-n",
         "news"
+      ],
+    },
+    {
+      "name": "Python: Start training news (90:10)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "start-training",
+        "-n",
+        "news10"
+      ],
+    },
+    {
+      "name": "Python: Start training news (70:30)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "start-training",
+        "-n",
+        "news30"
       ],
     },
     {
@@ -82,6 +138,62 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "Python: Start feature testing news (90:10)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "start-testing",
+        "-n",
+        "news10",
+        "-fl",
+        "20",
+        "50",
+        "100",
+        "200",
+        "500",
+        "700",
+        "1000",
+        "2000",
+        "5000",
+        "7000",
+        "10000",
+        "20000",
+        "50000",
+        "70000",
+        "-1",
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Start feature testing news (70:30)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "start-testing",
+        "-n",
+        "news30",
+        "-fl",
+        "20",
+        "50",
+        "100",
+        "200",
+        "500",
+        "700",
+        "1000",
+        "2000",
+        "5000",
+        "7000",
+        "10000",
+        "20000",
+        "50000",
+        "70000",
+        "-1",
+      ],
+      "console": "integratedTerminal"
+    },
+    {
       "name": "Python: Plot result news",
       "type": "python",
       "request": "launch",
@@ -92,7 +204,31 @@
         "news"
       ],
       "console": "integratedTerminal"
-    },   
+    },
+    {
+      "name": "Python: Plot result news (90:10)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "plot-result",
+        "-n",
+        "news10"
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Plot result news (70:30)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "plot-result",
+        "-n",
+        "news30"
+      ],
+      "console": "integratedTerminal"
+    },
     {
       "name": "Python: Start training webkb",
       "type": "python",
@@ -143,6 +279,6 @@
         "webkb"
       ],
       "console": "integratedTerminal"
-    },  
+    },
   ]
 }

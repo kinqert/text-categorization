@@ -14,13 +14,13 @@ def startImport(args):
     createTestTrainDir(path)
     datasetFolderPath = args.path[0]
 
-    if args.split is True:
+    if args.split is not None:
         for group in os.listdir(datasetFolderPath):
             files = os.listdir(f"{datasetFolderPath}/{group}")
             nFiles = len(files)
             testFiles = []
 
-            for i in range(0,  int(nFiles * 0.2)):
+            for i in range(0,  int(nFiles * args.split)):
                 random.seed()
                 index = random.randrange(0, len(files))
                 testFiles.append(files[index])
@@ -37,7 +37,24 @@ def startImport(args):
             copyFiles(f"{datasetFolderPath}/{group}", files, trainPath)
             copyFiles(f"{datasetFolderPath}/{group}", testFiles, testPath)
     else:
-        print("need to be implementated")
+        trainDatasetPath = f"{datasetFolderPath}/train"
+        testDatasetPath = f"{datasetFolderPath}/test"
+
+
+        trainPath = f"{path}/train/{group}"
+        testPath = f"{path}/test/{group}"
+
+        os.mkdir(trainPath)
+        os.mkdir(testPath)
+
+        for groupTrainDir in os.listdir(trainDatasetPath):
+            trainFiles = os.listdir(f"{trainDatasetPath}/{groupTrainDir}")
+            copyFiles(f"{trainDatasetPath}/{groupTrainDir}", trainFiles, trainPath)
+        for groupTestDir in os.listdir(testDatasetPath):
+            testFiles = os.listdir(f"{testDatasetPath}/{groupTestDir}")
+            copyFiles(f"{testDatasetPath}/{groupTestDir}", testFiles, testPath)
+
+
 def copyFiles(datasetPath, files, destinationPath):
     bar = defaultProgress(len(files)).start()
     i = 0
