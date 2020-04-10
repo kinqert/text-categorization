@@ -4,6 +4,7 @@ from models.dataset import Dataset
 from models.word import GroupedWord
 from setting import Setting
 
+# TODO: Need to be updated
 def plotWordsCountForAllDocuments(dataset: Dataset):
     plt.style.use('dark_background')
 

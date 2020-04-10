@@ -3,19 +3,16 @@ from models.word import GroupedWord
 # Abstract class not intended for direct usage
 class WeightedWordVector:
 
-    def __init__(self, weightedDictionary, word: GroupedWord):
+    def __init__(self, weightedDictionary, word: GroupedWord = None):
         super().__init__()
-        self.text = word.text 
-        self.groupVector = []
+        if word is not None:
+            self.text = word.text 
+        self.groupVector = [None] * len(weightedDictionary.groups)
+        self.weights = [0] * len(weightedDictionary.groups)
         self.weightedDictionary = weightedDictionary
 
-        self.weights = []
-
-        for group in self.weightedDictionary.groups:
-            self.weights.append(0)
-            self.groupVector.append(None)
-
-        self.addWeight(word)
+        if word is not None:
+            self.addWeight(word)
 
     def addWeight(self, word: GroupedWord):
         for i in range(0, len(self.weightedDictionary.groups)):
@@ -28,6 +25,17 @@ class WeightedWordVector:
     def updateWeights(self):
         for i in range(0, len(self.groupVector)):
             self.weights[i] = self.__createWordWeight__(self.groupVector[i], i)
+
+    def getCopy(self):
+        copy = self.__createNewInstance__()
+        copy.text = self.text
+        copy.groupVector = self.groupVector
+        copy.weights = self.weights
+        return copy
+
+
+    def __createNewInstance__(self):
+        return WeightedWordVector(self.weightedDictionar)
     
     def __createWordWeight__(self, groupedWord: GroupedWord, groupIndex):
         return 0
@@ -56,9 +64,12 @@ class WeightedWordVector:
         return ris
 
 class MBMWeightedWordVector(WeightedWordVector):
-    def __init__(self, groups, word):
-        super().__init__(groups, word)
+    def __init__(self, dictionary, word = None):
+        super().__init__(dictionary, word)
     
+    def __createNewInstance__(self):
+        return MBMWeightedWordVector(self.weightedDictionary)
+
     def __createWordWeight__(self, groupedWord: GroupedWord, groupIndex):
         denominator = 2 + self.weightedDictionary.totalClassWords[groupIndex]
         if groupedWord != None:
@@ -67,8 +78,11 @@ class MBMWeightedWordVector(WeightedWordVector):
             return 1 / denominator
 
 class MMWeightedWordVector(WeightedWordVector):
-    def __init__(self, groups, word):
-        super().__init__(groups, word)
+    def __init__(self, dictionary, word = None):
+        super().__init__(dictionary, word)
+
+    def __createNewInstance__(self):
+        return MMWeightedWordVector(self.weightedDictionary)
 
     def __createWordWeight__(self, groupedWord: GroupedWord, groupIndex):
         denominator = len(self.weightedDictionary.words) + self.weightedDictionary.totalClassWords[groupIndex]

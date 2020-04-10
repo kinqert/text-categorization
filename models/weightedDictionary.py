@@ -97,7 +97,7 @@ class WeightedDictionary(Dictionary):
         for word in words:
             exist, index = self.searchWord(word.text)
             self.words.insert(index, word)
-
+            self.words[index].weightedDictionary = self
     def classifyDictionary(self, dictionary: Dictionary):
         resultWeights = []
 
@@ -121,7 +121,10 @@ class WeightedDictionary(Dictionary):
     # Utils
     def getCopy(self):
         newDictionary = self.__createNewInstance__()
-        newDictionary.words = self.words
+        for wordVector in self.words:
+            newVector = wordVector.getCopy()
+            newVector.weightedDictionary = newDictionary
+            newDictionary.words.append(newVector)
         newDictionary.startWeights = self.startWeights
         newDictionary.mutualInformation = self.mutualInformation
         return newDictionary
