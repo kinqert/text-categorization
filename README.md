@@ -26,34 +26,40 @@ pip install sklearn matplotlib progressbar PrettyTable
 
 ## Risultati
 
-Questi risultati sono ottenuti tramite i dataset reperibili sotto.
+Data la natura casuale della suddivisione dei file in Train e Test, i risultati ottenuti possono variare, anche se in maniera lieve.
 
-## Newsgroup
+Questi risultati qui riportati sono ottenuti tramite i dataset reperibili nella sezione dataset.
 
-Il dataset e' formato da 19 gruppi.
+### Newsgroup
 
-Multi-variate Bernulli supera il multivariate 
+Il dataset e' formato da 19 gruppi, e sono stati utilizzati tutti.
+
+Multi-variate Bernulli supera il multinomial in dizionari relativamente piu' piccoli, ma al aumentare delle parole il multinomial ha una performance superiore.
+Ma in entrambi casi ci sa un miglioramento in termini di accuratezza al amuentare del numero di parole considerate. Arrivando fino al 85% di accuratezza per quanto riguarda il multinomial, e 80% per il multi-variate.
 
 ![News Result](/results/NewsResult.png)
 
-## Webkb
+### Webkb
+
+Il dataset Webkb e' formato da 7 gruppi, ma ne sono state utilizzate solo 4: student, faculty, staff e course.
+
 
 ![Webkb Result](/results/WebkbResult.png)
 
-## Sector 48
+### Sector 48
 
 ![Sector Result](/results/SectorResult.png)
 
-## Film
+### Film
 
 Il dataset e formato solo da due gruppi (nel dataset e presente anche una terza categoria che e' stata rimossa), positivo e negativo.
 
 Multi-variate Bernulli si comporta gia' bene con poche parole nel dizionario.
-Mentre il Multivariate si comporta bene solo con l'utilizzo massimo delle parole nel dizionario. 
+Il Multivariate ottiene delle prestazioni analoge al multi-variate bernulli, ma con delle prestazioni leggermente inferiori
 
 ![Film result](/results/FilmResult.png)
 
-Datasets:
+## Datasets:
 
 News: http://www.cs.cmu.edu/afs/cs/project/theo-11/www/naive-bayes/20_newsgroups.tar.gz
 
