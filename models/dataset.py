@@ -2,11 +2,10 @@ import sys
 import os
 import copy
 
-from progressbar import ProgressBar, Percentage, Bar
-
 from models.weightedDictionary import WeightedDictionary, MBMWeightedDictionary, MMWeightedDictionary
 from models.group import Group
 from util.colors import bcolors
+from util.defaultBar import defaultProgress
 from log import printAndLog, appendLog
 from models.test import Test
 
@@ -48,7 +47,7 @@ class Dataset:
         print("Creating weight")
         for group in self.trainGroups:
             print(f"Adding weight from group {group.name}")
-            bar = ProgressBar(len(group.dictionary.words), [Percentage(), Bar()]).start()
+            bar = defaultProgress(len(group.dictionary.words)).start()
             i = 0
             for word in group.dictionary.words:
                 self.mbmWeightedDictionary.searchAndAddWord(word)
@@ -77,7 +76,7 @@ class Dataset:
         for testGroup in self.testGroups:
             print(f"Testing file in group {testGroup.name}")
             totalTestFiles = len(testGroup.documents)
-            bar = ProgressBar(totalTestFiles, [Percentage(), Bar( marker='█')]).start()
+            bar = defaultProgress(totalTestFiles).start()
             documentTested = 0
             for document in testGroup.documents:
                 mbmWeights = mbmDictionary.classifyDictionary(document.dictionary)
@@ -115,8 +114,6 @@ class Dataset:
 
         mmTest = Test("MM", len(mmDictionary.words), accuracyMM)
         self.resultMMTest.append(mmTest)
-
-        print(bcolors.OKGREEN + "Done testing" + bcolors.ENDC)
         
         return mbmTest, mmTest 
 

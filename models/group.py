@@ -1,7 +1,7 @@
 from models.word import CountedWord, GroupedWord
 from models.dictionary import Dictionary
 
-from progressbar import ProgressBar, Percentage, Bar
+from util.defaultBar import defaultProgress
 
 class Group:
 
@@ -20,7 +20,7 @@ class Group:
         self.dictionary.clean()
 
         print(f"Start reading group {self.name}, type: {self.type}")
-        bar = ProgressBar(len(self.documents), [Percentage(), Bar()]).start()
+        bar = defaultProgress(len(self.documents)).start()
         i = 0
         for document in self.documents:
             document.readWords()

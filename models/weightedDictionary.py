@@ -1,10 +1,9 @@
 import math
 
-from progressbar import ProgressBar, Percentage, Bar
-
 from models.dictionary import Dictionary
 from models.word import GroupedWord
 from models.wordVector import WeightedWordVector, MBMWeightedWordVector, MMWeightedWordVector
+from util.defaultBar import defaultProgress
 
 # Abstract class not intended for direct usage
 class WeightedDictionary(Dictionary):
@@ -29,7 +28,7 @@ class WeightedDictionary(Dictionary):
     def createParameters(self):
         self.__setUpTotalWordsCount__()
         print(f"Starting calculating parameters for {self.__strTypeDictionary__()}")
-        bar = ProgressBar(len(self.words), [Percentage(), Bar()]).start()
+        bar = defaultProgress(len(self.words)).start()
         i = 0
         self.resetStartWeight()
         self.__setUpTotalWordsCount__()
@@ -57,7 +56,7 @@ class WeightedDictionary(Dictionary):
 
     def cleanDictionary(self):
         print(f"Cleaning {self.__strTypeDictionary__()}")
-        bar = ProgressBar(len(self.words), [Percentage(), Bar()]).start()
+        bar = defaultProgress(len(self.words)).start()
         cleanedWords = []
         for i in range(0, len(self.words)):
             wordInDocuments = 0
@@ -85,7 +84,7 @@ class WeightedDictionary(Dictionary):
         print(f"Selecting feature for {self.__strTypeDictionary__()}")
         if len(mutualInformation) < maxLength:
             maxLength = len(mutualInformation)
-        bar = ProgressBar(maxLength, [Percentage(), Bar()]).start()
+        bar = defaultProgress(maxLength).start()
         for i in range(0, maxLength):
             remainingWords.append(mutualInformation[i][1])
             bar.update(i)
@@ -164,7 +163,7 @@ class MBMWeightedDictionary(WeightedDictionary):
         mutualInformation = []
 
         print(f"Calculating mutual information for {self.__strTypeDictionary__()}")
-        bar = ProgressBar(len(self.words), [Percentage(), Bar()]).start()
+        bar = defaultProgress(len(self.words)).start()
         j = 0
         for wordVector in self.words:
             mi = 0
@@ -231,7 +230,7 @@ class MMWeightedDictionary(WeightedDictionary):
         mutualInformation = []
 
         print(f"Calculating mutual information for {self.__strTypeDictionary__()}")
-        bar = ProgressBar(len(self.words), [Percentage(), Bar()]).start()
+        bar = defaultProgress(len(self.words)).start()
         j = 0
         for wordVector in self.words:
             mi = 0

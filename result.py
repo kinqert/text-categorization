@@ -83,8 +83,12 @@ def plotTestResult(dataset):
         mmY.append(test[1] * 100)
 
 
-    plt.plot(mbmX, mbmY, "ro-", mmX, mmY, "b^-")
+    plt.plot(mbmX, mbmY, "ro-", label="Multi-variate Bernulli")
+    plt.plot(mmX, mmY, "b^-", label="Multinomial")
     plt.ylim(0, 100)
     plt.title(dataset.name)
+    plt.xlabel("Vocabulary Size")
+    plt.ylabel("Classification Accuracy")
     plt.xscale("log")
+    plt.legend()
     plt.show()

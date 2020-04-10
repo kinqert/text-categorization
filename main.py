@@ -92,10 +92,13 @@ def startTesting(args):
     dataset.cleanTest()
     testResults = []
 
+    i = 1
     for featureLength in testLengths:
         mbmTest, mmTest = dataset.startTest(featureLength)
         testResults.append(mbmTest)
         testResults.append(mmTest)
+        print(bcolors.OKGREEN + f"Done testing {i}/{len(testLengths)}" + bcolors.ENDC)
+        i += 1
     
     print(bcolors.OKGREEN + "Testing done!" + bcolors.ENDC)
     for test in testResults:
