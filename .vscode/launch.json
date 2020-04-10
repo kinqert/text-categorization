@@ -92,6 +92,57 @@
         "news"
       ],
       "console": "integratedTerminal"
-    }
+    },   
+    {
+      "name": "Python: Start training webkb",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "start-training",
+        "-n",
+        "webkb"
+      ],
+    },
+    {
+      "name": "Python: Start feature testing webkb",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "start-testing",
+        "-n",
+        "webkb",
+        "-fl",
+        "20",
+        "50",
+        "100",
+        "200",
+        "500",
+        "700",
+        "1000",
+        "2000",
+        "5000",
+        "7000",
+        "10000",
+        "20000",
+        "25000",
+        "-1",
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Plot result webkb",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "plot-result",
+        "-n",
+        "webkb"
+      ],
+      "console": "integratedTerminal"
+    },  
   ]
 }

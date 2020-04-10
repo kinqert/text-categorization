@@ -186,8 +186,8 @@ class MBMWeightedDictionary(WeightedDictionary):
                 d0 = (totalDocuments - B) * C
                 if A != 0:
                     mi += (A/totalDocuments) * math.log(n1/d1) 
-                if C - A != 0:
-                    mi += ((C-A) / totalDocuments) * math.log(n0/d0)
+                #if C - A != 0:
+                #    mi += ((C-A) / totalDocuments) * math.log(n0/d0)
 
             mutualInformation.append([mi, wordVector])
             j += 1
@@ -222,6 +222,7 @@ class MMWeightedDictionary(WeightedDictionary):
 
     def __setUpTotalWordsCount__(self):
         self.totalWords = 0
+        self.totalClassWords = [0] * len(self.groups)
         for wordVector in self.words:
             for i in range(0, len(wordVector.groupVector)):
                 groupedWord = wordVector.groupVector[i]
@@ -231,6 +232,7 @@ class MMWeightedDictionary(WeightedDictionary):
 
     def __getMutualInformationArray__(self):
         mutualInformation = []
+        self.__setUpTotalWordsCount__()
 
         print(f"Calculating mutual information for {self.__strTypeDictionary__()}")
         bar = defaultProgress(len(self.words)).start()
@@ -251,6 +253,11 @@ class MMWeightedDictionary(WeightedDictionary):
                 d = B * C
                 if A != 0:
                     mi += (A/self.totalWords) * math.log(n/d) 
+                
+                n0 = (C - A) * self.totalWords
+                d0 = (self.totalWords - B) * C
+                if C - A != 0:
+                    mi += ((C - A) / self.totalWords) * math.log(n0/d0)
 
             mutualInformation.append([mi, wordVector])
             j += 1
