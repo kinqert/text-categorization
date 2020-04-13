@@ -1,284 +1,303 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, vsit: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Python: Show dataset",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "show-datasets"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: import news group data default (80:20)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "import-data",
-        "-p",
-        "/home/lorenzo/data/20_newsgroups/",
-        "-s",
-        "-n",
-        "news"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: import news group data (90:10)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "import-data",
-        "-p",
-        "/home/lorenzo/data/20_newsgroups/",
-        "-s",
-        "0.1",
-        "-n",
-        "news10"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: import news group data (70:30)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "import-data",
-        "-p",
-        "/home/lorenzo/data/20_newsgroups/",
-        "-s",
-        "0.3",
-        "-n",
-        "news30"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Start training news",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "console": "integratedTerminal",
-      "args": [
-        "start-training",
-        "-n",
-        "news"
-      ],
-    },
-    {
-      "name": "Python: Start training news (90:10)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "console": "integratedTerminal",
-      "args": [
-        "start-training",
-        "-n",
-        "news10"
-      ],
-    },
-    {
-      "name": "Python: Start training news (70:30)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "console": "integratedTerminal",
-      "args": [
-        "start-training",
-        "-n",
-        "news30"
-      ],
-    },
-    {
-      "name": "Python: Start testing news",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "start-testing",
-        "-n",
-        "news"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Start feature testing news",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "start-testing",
-        "-n",
-        "news",
-        "-fl",
-        "20",
-        "50",
-        "100",
-        "200",
-        "500",
-        "700",
-        "1000",
-        "2000",
-        "5000",
-        "7000",
-        "10000",
-        "20000",
-        "50000",
-        "70000",
-        "-1",
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Start feature testing news (90:10)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "start-testing",
-        "-n",
-        "news10",
-        "-fl",
-        "20",
-        "50",
-        "100",
-        "200",
-        "500",
-        "700",
-        "1000",
-        "2000",
-        "5000",
-        "7000",
-        "10000",
-        "20000",
-        "50000",
-        "70000",
-        "-1",
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Start feature testing news (70:30)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "start-testing",
-        "-n",
-        "news30",
-        "-fl",
-        "20",
-        "50",
-        "100",
-        "200",
-        "500",
-        "700",
-        "1000",
-        "2000",
-        "5000",
-        "7000",
-        "10000",
-        "20000",
-        "50000",
-        "70000",
-        "-1",
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Plot result news",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "plot-result",
-        "-n",
-        "news"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Plot result news (90:10)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "plot-result",
-        "-n",
-        "news10"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Plot result news (70:30)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "plot-result",
-        "-n",
-        "news30"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Start training webkb",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "console": "integratedTerminal",
-      "args": [
-        "start-training",
-        "-n",
-        "webkb"
-      ],
-    },
-    {
-      "name": "Python: Start feature testing webkb",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "start-testing",
-        "-n",
-        "webkb",
-        "-fl",
-        "20",
-        "50",
-        "100",
-        "200",
-        "500",
-        "700",
-        "1000",
-        "2000",
-        "5000",
-        "7000",
-        "10000",
-        "20000",
-        "25000",
-        "-1",
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Python: Plot result webkb",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "args": [
-        "plot-result",
-        "-n",
-        "webkb"
-      ],
-      "console": "integratedTerminal"
-    },
-  ]
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, vsit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Show dataset",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["show-datasets"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: import news group data default (80:20)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "import-data",
+                "-p",
+                "/home/lorenzo/data/20_newsgroups/",
+                "-s",
+                "-n",
+                "news"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: import news group data (90:10)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "import-data",
+                "-p",
+                "/home/lorenzo/data/20_newsgroups/",
+                "-s",
+                "0.1",
+                "-n",
+                "news10"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: import news group data (70:30)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "import-data",
+                "-p",
+                "/home/lorenzo/data/20_newsgroups/",
+                "-s",
+                "0.3",
+                "-n",
+                "news30"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Start training news",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": ["start-training", "-n", "news"]
+        },
+        {
+            "name": "Python: Start training news (90:10)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": ["start-training", "-n", "news10"]
+        },
+        {
+            "name": "Python: Start training news (70:30)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": ["start-training", "-n", "news30"]
+        },
+        {
+            "name": "Python: Start testing news",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["start-testing", "-n", "news"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Start feature testing news",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "start-testing",
+                "-n",
+                "news",
+                "-fl",
+                "20",
+                "50",
+                "100",
+                "200",
+                "500",
+                "700",
+                "1000",
+                "2000",
+                "5000",
+                "7000",
+                "10000",
+                "20000",
+                "50000",
+                "70000",
+                "-1"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Start KL feature testing news",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "start-testing",
+                "-n",
+                "news",
+                "-kl",
+                "-fl",
+                "20",
+                "50",
+                "100",
+                "200",
+                "500",
+                "700",
+                "1000",
+                "2000",
+                "5000",
+                "7000",
+                "10000",
+                "20000",
+                "50000",
+                "70000",
+                "-1"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Start feature testing news (90:10)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "start-testing",
+                "-n",
+                "news10",
+                "-fl",
+                "20",
+                "50",
+                "100",
+                "200",
+                "500",
+                "700",
+                "1000",
+                "2000",
+                "5000",
+                "7000",
+                "10000",
+                "20000",
+                "50000",
+                "70000",
+                "-1"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Start feature testing news (70:30)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "start-testing",
+                "-n",
+                "news30",
+                "-fl",
+                "20",
+                "50",
+                "100",
+                "200",
+                "500",
+                "700",
+                "1000",
+                "2000",
+                "5000",
+                "7000",
+                "10000",
+                "20000",
+                "50000",
+                "70000",
+                "-1"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Plot result news",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["plot-result", "-n", "news"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Plot result news (90:10)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["plot-result", "-n", "news10"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Plot result news (70:30)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["plot-result", "-n", "news30"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Start training webkb",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": ["start-training", "-n", "webkb"]
+        },
+        {
+            "name": "Python: Start feature testing webkb",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "start-testing",
+                "-n",
+                "webkb",
+                "-fl",
+                "20",
+                "50",
+                "100",
+                "200",
+                "500",
+                "700",
+                "1000",
+                "2000",
+                "5000",
+                "7000",
+                "10000",
+                "20000",
+                "25000",
+                "-1"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Start kl feature testing webkb",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "start-testing",
+                "-n",
+                "webkb",
+                "-kl",
+                "-fl",
+                "20",
+                "50",
+                "100",
+                "200",
+                "500",
+                "700",
+                "1000",
+                "2000",
+                "5000",
+                "7000",
+                "10000",
+                "20000",
+                "25000",
+                "-1"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Plot result webkb",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": ["plot-result", "-n", "webkb"],
+            "console": "integratedTerminal"
+        }
+    ]
 }

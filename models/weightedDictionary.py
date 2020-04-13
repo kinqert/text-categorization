@@ -11,8 +11,10 @@ class WeightedDictionary(Dictionary):
         super().__init__()
         self.groups = groups
         self.startWeights = [0] * len(groups)
-        self.mutualInformation = []
 
+        self.activeInformation = []
+        self.totalDocuments = 0
+        self.totalClassDocuments = [0] * len(groups)
         self.totalWords = 0
         self.totalClassWords = [0] * len(groups)
     
@@ -39,10 +41,24 @@ class WeightedDictionary(Dictionary):
             bar.update(i)
         bar.finish()
         print("Parameters created")
-        self.mutualInformation = self.__getMutualInformationArray__()
+    
+    def setUpFeatureInformation(self):
+        return
 
     def __setUpTotalWordsCount__(self):
-        return
+        self.totalDocuments = 0
+        for i in range(0, len(self.groups)):
+            self.totalDocuments += len(self.groups[i].documents)
+            self.totalClassDocuments[i] = len(self.groups[i].documents)
+
+        self.totalWords = 0
+        self.totalClassWords = [0] * len(self.groups)
+        for wordVector in self.words:
+            for i in range(0, len(wordVector.groupVector)):
+                groupedWord = wordVector.groupVector[i]
+                if groupedWord != None:
+                    self.totalWords += groupedWord.counted
+                    self.totalClassWords[i] += groupedWord.counted
 
     def __getMutualInformationArray__(self):
         return []
@@ -77,16 +93,14 @@ class WeightedDictionary(Dictionary):
 
     # Testing
     def featureSelection(self, maxLength):
-        mutualInformation = self.mutualInformation
-        mutualInformation.sort(reverse=True, key=lambda tup:tup[0])
         remainingWords = []
 
         print(f"Selecting feature for {self.__strTypeDictionary__()}")
-        if len(mutualInformation) < maxLength:
-            maxLength = len(mutualInformation)
+        if len(self.activeInformation) < maxLength:
+            maxLength = len(self.activeInformation)
         bar = defaultProgress(maxLength).start()
         for i in range(0, maxLength):
-            remainingWords.append(mutualInformation[i][1])
+            remainingWords.append(self.activeInformation[i][1])
             bar.update(i)
         bar.finish()
         print("Done selecting feature")
@@ -98,6 +112,7 @@ class WeightedDictionary(Dictionary):
             exist, index = self.searchWord(word.text)
             self.words.insert(index, word)
             self.words[index].weightedDictionary = self
+
     def classifyDictionary(self, dictionary: Dictionary):
         resultWeights = []
 
@@ -126,11 +141,15 @@ class WeightedDictionary(Dictionary):
             newVector.weightedDictionary = newDictionary
             newDictionary.words.append(newVector)
         newDictionary.startWeights = self.startWeights
-        newDictionary.mutualInformation = self.mutualInformation
+        newDictionary.activeInformation = self.activeInformation
+        newDictionary.totalDocuments = self.totalDocuments
+        newDictionary.totalClassDocuments = self.totalClassDocuments
+        newDictionary.totalWords = self.totalWords
+        newDictionary.totalWords = self.totalClassWords
         return newDictionary
     
     def __createNewInstance__(self):
-        return WeightedDictionary(self.groups)    
+        return WeightedDictionary(self.groups)
 
     def getSumOfCounted(self):
         ris = 0
@@ -153,11 +172,8 @@ class MBMWeightedDictionary(WeightedDictionary):
     def __getWeightOfClass__(self, wordVector: WeightedWordVector, word:GroupedWord, classIndex):
         return math.log(wordVector.weights[classIndex]) - math.log(1 - wordVector.weights[classIndex])
 
-    def __setUpTotalWordsCount__(self):
-        self.totalWords = 0
-        for i in range(0, len(self.groups)):
-            self.totalWords += len(self.groups[i].documents)
-            self.totalClassWords[i] = len(self.groups[i].documents)
+    def setUpFeatureInformation(self):
+        self.activeInformation = self.__getMutualInformationArray__()
 
     def __getMutualInformationArray__(self):
         mutualInformation = []
@@ -175,22 +191,23 @@ class MBMWeightedDictionary(WeightedDictionary):
                 if groupedWord is not None:
                     A = groupedWord.documents
 
-                C = len(self.groups[i].documents)
+                C = self.totalClassDocuments[i]
     
-                n1 = A * self.totalWords
-                n0 = (C - A) * self.totalWords
+                n1 = A * self.totalDocuments
+                n0 = (C - A) * self.totalDocuments
                 d1 = B * C
-                d0 = (self.totalWords - B) * C
+                d0 = (self.totalDocuments - B) * C
                 if A != 0:
-                    mi += (A/self.totalWords) * math.log(n1/d1) 
+                    mi += (A/self.totalDocuments) * math.log(n1/d1) 
                 if C - A != 0:
-                    mi += ((C-A) / self.totalWords) * math.log(n0/d0)
+                    mi += ((C-A) / self.totalDocuments) * math.log(n0/d0)
 
             mutualInformation.append([mi, wordVector])
             j += 1
             bar.update(j)
         bar.finish()
-        
+
+        mutualInformation.sort(reverse=True, key=lambda tup:tup[0])
         return mutualInformation
 
     def __updateStartWeights__(self, wordVector: WeightedWordVector):
@@ -209,6 +226,9 @@ class MBMWeightedDictionary(WeightedDictionary):
 class MMWeightedDictionary(WeightedDictionary):
     def __init__(self, groups):
         super().__init__(groups)
+        self.klInformations = []
+        self.klSelection = False
+        self.mutualInformation = []
 
     def __insertWord__(self, index, newWord):
         self.words.insert(index, MMWeightedWordVector(self, newWord))
@@ -217,15 +237,51 @@ class MMWeightedDictionary(WeightedDictionary):
         wordCount = word.counted
         return wordCount * math.log(wordVector.weights[classIndex]) - math.log(math.factorial(wordCount)) 
 
-    def __setUpTotalWordsCount__(self):
-        self.totalWords = 0
-        self.totalClassWords = [0] * len(self.groups)
+    def setUpFeatureInformation(self):
+        self.mutualInformation = self.__getMutualInformationArray__()
+        self.klInformations = self.__getdKlArray__()
+
+    def featureSelection(self, maxLength, personalizedInformation=None):
+        if self.klSelection:
+            self.activeInformation = self.klInformations
+        else:
+            self.activeInformation = self.mutualInformation
+
+        return super().featureSelection(maxLength)
+
+    def __getdKlArray__(self):
+        dKL = []
+
+        print(f"Calculating kl information for {self.__strTypeDictionary__()}")
+        bar = defaultProgress(len(self.words)).start()
+        j = 0
         for wordVector in self.words:
+            KLt = 0
+
+            pOfWord = 0
+            argLogKt = 0
+
             for i in range(0, len(wordVector.groupVector)):
+                # KLt
+                pOfC = self.totalClassDocuments[i] / self.totalDocuments
                 groupedWord = wordVector.groupVector[i]
-                if groupedWord != None:
-                    self.totalWords += groupedWord.counted
-                    self.totalClassWords[i] += groupedWord.counted
+                # Kt
+                pOfWord += pOfC * wordVector.weights[i]
+
+                if groupedWord is not None:
+                    KLt -= pOfC * wordVector.weights[i] * math.log(groupedWord.documents / self.totalClassDocuments[i])
+                    argLogKt += groupedWord.documents / self.totalDocuments
+
+            Kt = - pOfWord * math.log(argLogKt)
+            KL = Kt - KLt
+            dKL.append([KL, wordVector])
+            j += 1
+            bar.update(j)
+        bar.finish()
+
+        dKL.sort(reverse=True, key=lambda tup:tup[0])
+        return dKL
+
 
     def __getMutualInformationArray__(self):
         mutualInformation = []
@@ -260,7 +316,16 @@ class MMWeightedDictionary(WeightedDictionary):
             bar.update(j)
         bar.finish()
         
+        mutualInformation.sort(reverse=True, key=lambda tup:tup[0])
         return mutualInformation
+
+
+    def getCopy(self):
+        mmDictionary = super().getCopy()
+        mmDictionary.mutualInformation = self.mutualInformation
+        mmDictionary.klInformations = self.klInformations
+        mmDictionary.klSelection = self.klSelection
+        return mmDictionary
 
     def __strTypeDictionary__(self):
         return "MM dictonary"

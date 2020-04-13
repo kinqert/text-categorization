@@ -94,7 +94,7 @@ def startTesting(args):
 
     i = 1
     for featureLength in testLengths:
-        mbmTest, mmTest = dataset.startTest(featureLength)
+        mbmTest, mmTest = dataset.startTest(featureLength, args.kl_feature)
         testResults.append(mbmTest)
         testResults.append(mmTest)
         print(bcolors.OKGREEN + f"Done testing {i}/{len(testLengths)}" + bcolors.ENDC)
@@ -136,6 +136,7 @@ def main():
                         help='Path to the folder of the dataset destination; Needed for import-dataset')
     parser.add_argument('-n', '--name', nargs=1, type=str, metavar='dataset-name', help='Name of the dataset selected; Needed for start-training')
     parser.add_argument('-fl', '--feature-length', nargs='+', type=int, metavar='feature-length', help='Choose the length of vocabulary for test')
+    parser.add_argument('-kl', '--kl-feature', action="store_const", const=True, default=False, help="Use the kl feature selection for the multinomial model")
 
     args = parser.parse_args()
 

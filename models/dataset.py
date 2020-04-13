@@ -63,11 +63,14 @@ class Dataset:
         self.mbmWeightedDictionary.createParameters()
         self.mmWeightedDictionary.createParameters()
 
+        self.mbmWeightedDictionary.setUpFeatureInformation()
+        self.mmWeightedDictionary.setUpFeatureInformation()
+
         print(bcolors.OKGREEN + f"Dictionary MBM created with {len(self.mbmWeightedDictionary.words)} words" + bcolors.ENDC)
         print(bcolors.OKGREEN + f"Dictionary MM created with {len(self.mmWeightedDictionary.words)} words" + bcolors.ENDC)
 
-    def startTest(self, maxLength = -1):
-        mbmDictionary, mmDictionary = self.__setSelectFeature__(maxLength)
+    def startTest(self, maxLength = -1, kl = False):
+        mbmDictionary, mmDictionary = self.__setSelectFeature__(maxLength, kl)
 
         currentTestedFiles = 0
         correctMBMPrediction = 0
@@ -117,12 +120,14 @@ class Dataset:
         
         return mbmTest, mmTest 
 
-    def __setSelectFeature__(self, maxLength):
+    def __setSelectFeature__(self, maxLength, kl = False):
         if maxLength == -1:
             return self.mbmWeightedDictionary, self.mmWeightedDictionary
 
         cleanMBMDictionary = self.mbmWeightedDictionary.getCopy()
         cleanMMDictionary = self.mmWeightedDictionary.getCopy()
+
+        cleanMMDictionary.klSelection = kl
 
         cleanMBMDictionary.featureSelection(maxLength)
         cleanMMDictionary.featureSelection(maxLength)

@@ -71,7 +71,7 @@ class MBMWeightedWordVector(WeightedWordVector):
         return MBMWeightedWordVector(self.weightedDictionary)
 
     def __createWordWeight__(self, groupedWord: GroupedWord, groupIndex):
-        denominator = 2 + self.weightedDictionary.totalClassWords[groupIndex]
+        denominator = 2 + self.weightedDictionary.totalClassDocuments[groupIndex]
         if groupedWord != None:
             return (1 + groupedWord.documents) / denominator
         else:
