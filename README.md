@@ -18,9 +18,17 @@ pip install sklearn matplotlib progressbar PrettyTable
 
 ## Struttura
 
-La struttra delle classi è la seguente
+La struttra delle classi è la seguente.
 
-![](documents/uml/UMLCompleto.jpg)
+![uml](documents/uml/UMLCompleto.jpg)
+
+Qui vengono mostrati i processi di train e test.
+
+![flow train test](documents/uml/Flow-train-test.jpg)
+
+Questa è la modalità di raggruppamento.
+
+![Grouping](documents/uml/grouping.jpg)
 
 ## Comandi
 
