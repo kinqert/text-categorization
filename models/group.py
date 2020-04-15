@@ -16,14 +16,14 @@ class Group:
 
         self.totalCountedWords = 0
     
-    def readDocuments(self):
+    def readDocuments(self, stopWords=[], headers=[], fastReading=False):
         self.dictionary.clean()
 
         print(f"Start reading group {self.name}, type: {self.type}")
         bar = defaultProgress(len(self.documents)).start()
         i = 0
         for document in self.documents:
-            document.readWords()
+            document.readWords(stopWords, headers, fastReading)
 
             for word in document.dictionary.words:
                 self.dictionary.searchAndAddWord(GroupedWord(word.text, self, word.counted, 1))

@@ -20,6 +20,7 @@ class Dataset:
         self.trainGroups = []
         self.testGroups = []
         self.dictionaryWords = []
+        self.fastReading = False
         self.datasetReaded = False
         self.mmWeightedDictionary: MMWeightedDictionary
         self.mbmWeightedDictionary: MBMWeightedDictionary
@@ -28,14 +29,15 @@ class Dataset:
         self.resultMMTest = []
 
     
-    def readDataset(self):
-        if self.datasetReaded is False:
+    def readDataset(self, stopWords=[], headers=[], fastReading=False):
+        if self.datasetReaded is False or fastReading != self.fastReading:
             for group in self.trainGroups:
-                group.readDocuments()
+                group.readDocuments(stopWords, headers, fastReading)
             for group in self.testGroups:
-                group.readDocuments()
+                group.readDocuments(stopWords, headers, fastReading)
 
             self.datasetReaded = True
+            self.fastReading = fastReading
     
     def createDictionary(self):
         if self.datasetReaded is False:

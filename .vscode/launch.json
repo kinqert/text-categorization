@@ -68,6 +68,22 @@
             "args": ["start-training", "-n", "news"]
         },
         {
+            "name": "Python: Start fast training news",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": ["start-training", "-fr", "-n", "news", "-he", "Newsgroups:"]
+        },
+        {
+            "name": "Python: Start training news with HE",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": ["start-training", "-n", "news", "-he", "Newsgroups:"]
+        },
+        {
             "name": "Python: Start training news (90:10)",
             "type": "python",
             "request": "launch",

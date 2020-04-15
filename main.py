@@ -3,7 +3,6 @@ import os
 import argparse
 
 from prettytable import PrettyTable
-from shutil import copyfile, copytree
 
 from importing import startImport
 from factory.datasetFactory import createDataset
@@ -27,9 +26,8 @@ def startTraining(args):
         return
     dataset = loadOrCreateDataset(args)
 
-    dataset.readDataset()
+    dataset.readDataset(args.stop_words, args.headers, args.fast_reading)
     dataset.createDictionary()
-    #analyzeLostWords(dataset)
     saveDataset(dataset)
     print(bcolors.OKGREEN + "Done learning!" + bcolors.ENDC)
 
@@ -67,10 +65,6 @@ def importData(args):
     print("Dimension of dataset(in files):" + str(totData))
     startImport(args)
     print(bcolors.OKGREEN + "Data imported!" + bcolors.ENDC)
-
-
-def loadData(datasetPath):
-    copytree(datasetPath, sys.path[0] + "/data-000001")
 
 def startTesting(args):
     if args.name is None:
@@ -131,12 +125,19 @@ def main():
 
     parser.add_argument('command', choices=commands.keys(), metavar='command',
                         help=f'Commands avaiable: {str(commands.keys())}')
-    parser.add_argument('-s', '--split', nargs='?', const=0.2, type=float, help='Split the dataset path into train and test default ratio 0.2 (80:20)')
+    parser.add_argument('-s', '--split', nargs='?', const=0.2, type=float, 
+                        help='Split the dataset path into train and test default ratio 0.2 (80:20)')
     parser.add_argument('-p', '--path', nargs=1, type=str, metavar='dataset-path',
                         help='Path to the folder of the dataset destination; Needed for import-dataset')
-    parser.add_argument('-n', '--name', nargs=1, type=str, metavar='dataset-name', help='Name of the dataset selected; Needed for start-training')
-    parser.add_argument('-fl', '--feature-length', nargs='+', type=int, metavar='feature-length', help='Choose the length of vocabulary for test')
-    parser.add_argument('-kl', '--kl-feature', action="store_const", const=True, default=False, help="Use the kl feature selection for the multinomial model")
+    parser.add_argument('-n', '--name', nargs=1, type=str, metavar='dataset-name', 
+                        help='Name of the dataset selected; Needed for start-training')
+    parser.add_argument('-sw', '--stop-words', nargs='+', type=str, help='set the stop words for reading')
+    parser.add_argument('-he', '--headers', nargs='+', type=str, help='set the headers to remove for reading')
+    parser.add_argument('-fl', '--feature-length', nargs='+', type=int, metavar='feature-length', 
+                        help='Choose the length of vocabulary for test')
+    parser.add_argument('-fr', '--fast-reading', action="store_const", const=True, default=False, help='Set the fast reading when learning. This action remove tokenization')
+    parser.add_argument('-kl', '--kl-feature', action="store_const", const=True, default=False, 
+                        help="Use the kl feature selection for the multinomial model")
 
     args = parser.parse_args()
 

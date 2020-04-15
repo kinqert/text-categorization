@@ -32,7 +32,7 @@ Questi risultati qui riportati sono ottenuti tramite i dataset reperibili nella 
 
 ### Newsgroup
 
-Il dataset e' formato da 19 gruppi, e sono stati utilizzati tutti.
+Il dataset é formato da 19 gruppi, e sono stati utilizzati tutti.
 
 Multi-variate Bernulli supera il multinomial in dizionari relativamente piu' piccoli, ma al aumentare delle parole il multinomial ha una performance superiore.
 Ma in entrambi casi ci sa un miglioramento in termini di accuratezza al amuentare del numero di parole considerate. Arrivando fino al 85% di accuratezza per quanto riguarda il multinomial, e 80% per il multi-variate.
@@ -41,7 +41,7 @@ Ma in entrambi casi ci sa un miglioramento in termini di accuratezza al amuentar
 
 ### Webkb
 
-Il dataset Webkb e' formato da 7 gruppi, ma ne sono state utilizzate solo 4: student, faculty, staff e course.
+Il dataset Webkb é formato da 7 gruppi, ma ne sono state utilizzate solo 4: student, faculty, staff e course.
 
 
 ![Webkb Result](/results/WebkbResult.png)
@@ -52,9 +52,9 @@ Il dataset Webkb e' formato da 7 gruppi, ma ne sono state utilizzate solo 4: stu
 
 ### Film
 
-Il dataset e formato solo da due gruppi (nel dataset e presente anche una terza categoria che e' stata rimossa), positivo e negativo.
+Il dataset é formato solo da due gruppi (nel dataset e presente anche una terza categoria che e' stata rimossa), positivo e negativo.
 
-Multi-variate Bernulli si comporta gia' bene con poche parole nel dizionario.
+Multi-variate Bernulli si comporta già bene con poche parole nel dizionario.
 Il Multivariate ottiene delle prestazioni analoge al multi-variate bernulli, ma con delle prestazioni leggermente inferiori
 
 ![Film result](/results/FilmResult.png)
