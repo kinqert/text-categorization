@@ -2,7 +2,7 @@
 
 Progetto per il corso di AI per l'università degli studi di Firenze.
 
-Si vuole ottenere i risultati di [(McCallum & Nigam, 1998)](/documents/text-categorization)
+Si vuole ottenere i risultati di [(McCallum & Nigam, 1998)](/documents/text-categorization.pdf)
 
 ## Dipendenze
 
@@ -24,11 +24,11 @@ La struttra delle classi è la seguente
 
 ## Comandi
 
-Il software prevede 4 comandi principali, più eventuali argomenti posizionali che possono sia opzionali che obbligatori a seconda del comando.
+Il software prevede 4 comandi principali, più eventuali argomenti posizionali che possono essere sia opzionali che obbligatori a seconda del comando.
 
 ### import-data
 
-Questo comando serve per importare il dataset nella directory 'data' del progetto, può anche essere aggiunta manualmente, semplicemnte compiando il dataset nella directory assicurandosi che i dati siano divisi in 'train' e 'test'.
+Questo comando serve per importare il dataset nella directory 'data' del progetto, può anche essere aggiunta manualmente, semplicemente copiando il dataset nella directory e assicurandosi che i dati siano divisi in 'train' e 'test'.
 
 Argomenti posizionali:
 - -p | --path: Serve per indicare il percorso alla cartella contenente il dataset. (Obbligatorio)
@@ -69,15 +69,16 @@ Mostra i datasets disponibili.
 
 Data la natura casuale della suddivisione dei file in Train e Test, i risultati ottenuti possono variare, anche se in maniera lieve.I risultati qui riportati sono ottenuti tramite i dataset reperibili nella sezione dataset.
 
-Sono stati analizzati i 4 datasets, 
-
+Sono stati analizzati i 4 datasets, e vengono messi a confronto i due modelli, e il comportamento delle due varianti di feture selection. 
 
 ### Newsgroup
 
 Il dataset è formato da 19 gruppi, e sono stati utilizzati tutti. Come headers è stato impostato "Newsgroups:".
 
 Multi-variate Bernulli supera il multinomial in dizionari relativamente piu' piccoli, ma al aumentare delle parole il multinomial ha una performance superiore.
-Ma in entrambi casi ci sa un miglioramento in termini di accuratezza al amuentare del numero di parole considerate. Arrivando fino al 85% di accuratezza per quanto riguarda il multinomial, e 80% per il multi-variate. In questo caso il modello multinomiale con il KL ottiene un maggior incremento nell'accuratezza rispetto all'informazione mutuale.
+In entrambi casi si ha un miglioramento in termini di accuratezza al aumentare del numero di parole considerate. Arrivando fino al 85% di accuratezza per quanto riguarda il multinomial, e 80% per il multi-variate.
+
+In questo caso il modello multinomiale, con il KL, ottiene un maggior incremento nell'accuratezza rispetto all'informazione mutuale.
 
 #### Mutual information
 
@@ -89,10 +90,12 @@ Ma in entrambi casi ci sa un miglioramento in termini di accuratezza al amuentar
 
 ### Webkb
 
-Il dataset Webkb è formato da 7 gruppi, ma ne sono state utilizzate solo 4: student, faculty, staff e course.
+Il dataset Webkb è formato da 7 gruppi, ma ne sono state utilizzati solo 4: student, faculty, staff e course.
 
 Qui possiamo notare come il multi-variate già da subito ha un accuratezza molto elevata, con un massimo a 100 parole, e tiene un andamento costante.
-Nel caso multinomiale se si usa l'informazione mutuale si ha un accuratezza minore rispetto al multi-variate nel caso dei dizionari piccoli, e va a diminuire man mano che le parole del dizionario aumentano. Anche qui con la versione KL si ottengono dei risultati migliori.
+Nel caso multinomiale se si usa l'informazione mutuale si ha un accuratezza minore rispetto al multi-variate nel caso dei dizionari piccoli, e va a diminuire man mano che le parole del dizionario aumentano.
+
+Anche qui con la versione KL si ottengono dei risultati migliori.
 
 #### Mutual information
 
@@ -104,7 +107,17 @@ Nel caso multinomiale se si usa l'informazione mutuale si ha un accuratezza mino
 
 ### Sector 48
 
+Il dataset è formato da categorie con vari sotto gruppi, sono stati quindi tutti trattati come gruppi diversi, e ne sono risultati in totale 48.
+
+Qui il divario con poche parole è più ampio, e il multinomial supera il multi-variate quando ha all'incirca 5000 parole nel dizionario.
+
+In questo caso la versione KL per la feature selection si compora peggio rispetto all'informazione mutuale e non si ottengono performance migliori rispetto al multivariate, fino a quando non vengono usate tutte le parole.
+
+#### Mutual information
+
 ![Sector Result](/results/plots/Sector48IM.png)
+
+#### KL feature-selection
 
 ![Sector Result](/results/plots/Sector48KL.png)
 
@@ -112,10 +125,29 @@ Nel caso multinomiale se si usa l'informazione mutuale si ha un accuratezza mino
 
 Il dataset è formato solo da due gruppi (nel dataset e presente anche una terza categoria che è stata rimossa), positivo e negativo.
 
-Multi-variate Bernulli si comporta già bene con poche parole nel dizionario.
-Il Multivariate ottiene delle prestazioni analoge al multi-variate bernulli, ma con delle prestazioni leggermente inferiori
+Entrambi qui si comportano bene già con poche parole e tengono un andamento più o meno costante.
 
-![Film result](/results/FilmResult.png)
+#### Mutual information
+
+![Film result](/results/plots/filmIM.png)
+
+#### KL feature-selection
+
+![Film result](/results/plots/filmKL.png)
+
+## Conclusioni
+
+In generale il Multi-variate Bernulli Model supera il Multinomial, quando vengono selezionate relativamente poche parole dal dizionario, mentre il Multinomial tende ad avere una maggior accuratezza con l'utilizzo completo delle parole nel dizionario.
+
+Per quanto riguarda le due tipologie di feature selection, la versione KL è quella che ottiene migliori risultati la maggior parte delle volte, ma non sempre accade come nel caso del dataset 'Sector48'.
+
+## Riferimenti
+
+[Testo assegnato](/documents/Adreani.pdf)
+
+[(McCallum & Nigam, 1998)](/documents/text-categorization.pdf)
+
+[KL-Selection](/documents/kl.pdf)
 
 ## Datasets:
 
