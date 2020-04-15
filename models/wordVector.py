@@ -35,7 +35,7 @@ class WeightedWordVector:
 
 
     def __createNewInstance__(self):
-        return WeightedWordVector(self.weightedDictionar)
+        return WeightedWordVector(self.weightedDictionary)
     
     def __createWordWeight__(self, groupedWord: GroupedWord, groupIndex):
         return 0
