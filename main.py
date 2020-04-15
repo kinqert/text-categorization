@@ -19,7 +19,7 @@ def loadOrCreateDataset(args):
 
     return dataset
 
-def startTraining(args):
+def startLearning(args):
     if args.name is None:
         print(bcolors.FAIL + "Name must be provided!" + bcolors.ENDC)
         return
@@ -110,7 +110,7 @@ def plotResult(args):
    
 commands = {
     'import-data': importData,
-    'start-training': startTraining,
+    'start-learning': startLearning,
     'show-datasets': printDatasets,
     'start-testing': startTesting,
     'plot-result': plotResult
@@ -127,9 +127,9 @@ def main():
     parser.add_argument('-s', '--split', nargs='?', const=0.2, type=float, 
                         help='Split the dataset path into train and test default ratio 0.2 (80:20)')
     parser.add_argument('-p', '--path', nargs=1, type=str, metavar='dataset-path',
-                        help='Path to the folder of the dataset destination; Needed for import-dataset')
+                        help='Path to the folder of the dataset destination')
     parser.add_argument('-n', '--name', nargs=1, type=str, metavar='dataset-name', 
-                        help='Name of the dataset selected; Needed for start-training')
+                        help='Name of the dataset selected')
     parser.add_argument('-sw', '--stop-words', nargs='+', type=str, help='set the stop words for reading')
     parser.add_argument('-he', '--headers', nargs='+', type=str, help='set the headers to remove for reading')
     parser.add_argument('-fl', '--feature-length', nargs='+', type=int, metavar='feature-length', 

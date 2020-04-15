@@ -22,17 +22,39 @@ La struttra delle classi è la seguente.
 
 ![uml](documents/uml/UMLCompleto.jpg)
 
-Qui vengono mostrati i processi di train e test.
+### Descrizione classi
+
+Dataset: Classe principale che gestisce tutta la struttura, si occupa di leggere i gruppi, creare il dizionario pesato e effettua i test.
+
+Group/Document: Classi che interpretano la gerarchia della directory del dataset. 
+
+GroupedWord/DocumentWord: Classi che rappresentano la parola trovata, rispettivamente per le classi Group e Document. (Vedi sotto la modalità di raggruppamento)
+
+Dictionary: Classe che gestisce le parole (GroupedWord/CountedWord) in modo ordinato e utilizza la ricerca binaria per ottenere una ottima efficenza.
+
+WeightedDictionary: Classe astratta che eredita da Dictionary. Ma diversamente da Dictionary le sue parole sono dei WeightedWordVector.
+
+MBMWeightedDictionary, MMWeightedDictionary: Classi che implementano il WeightedDictionary, e calcolano i parametri a seconda del modello predittivo Multi-variate o Multinomial.
+
+WeightedWordVector: Classe astratta che contiene al suo interno un vettore di GroupedWord pari al numero delle classi totali. Si occupa di calcolare i parametri relativi alla parola data la classe.
+
+MBMWeightedWordVector, MMWeightedWordVector: Classi che implementano WeightedWordVector, e creano i pesi a seconda del modello predittivo.
+
+### Sequenza train e test
+
+Qui vengono mostrati i principali processi in train e test.
 
 ![flow train test](documents/uml/Flow-train-test.jpg)
 
-Questa è la modalità di raggruppamento.
+### Grouping
+
+Questa è la visualizzazione della modalità di raggruppamento.
 
 ![Grouping](documents/uml/grouping.jpg)
 
 ## Comandi
 
-Il software prevede 4 comandi principali, più eventuali argomenti posizionali che possono essere sia opzionali che obbligatori a seconda del comando.
+Il software prevede 5 comandi principali, più eventuali argomenti posizionali che possono essere sia opzionali che obbligatori a seconda del comando.
 
 ### import-data
 
@@ -43,7 +65,7 @@ Argomenti posizionali:
 - -s | --split [ratio]: Indica che il dataset deve essere diviso in 'train' e 'test', può anche essere indicato il rapporto di suddivisione. Default: 0.2 (80:20)
 - -n | --name [name]: Imposta il nome da dare al dataset 
 
-### start-training
+### start-learning
 
 Questo comando inizia a leggere il dataset, e crea il dizionario con i suoi parametri.
 
@@ -134,6 +156,8 @@ In questo caso la versione KL per la feature selection si compora peggio rispett
 Il dataset è formato solo da due gruppi (nel dataset e presente anche una terza categoria che è stata rimossa), positivo e negativo.
 
 Entrambi qui si comportano bene già con poche parole e tengono un andamento più o meno costante.
+
+Qui abbiamo poca differenza tra il KL e l'informazione mutuale.
 
 #### Mutual information
 

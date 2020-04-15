@@ -60,44 +60,44 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Start training news",
+            "name": "Python: Start learning news",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
-            "args": ["start-training", "-n", "news"]
+            "args": ["start-learning", "-n", "news"]
         },
         {
-            "name": "Python: Start fast training news",
+            "name": "Python: Start fast learning news",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
-            "args": ["start-training", "-fr", "-n", "news", "-he", "Newsgroups:"]
+            "args": ["start-learning", "-fr", "-n", "news", "-he", "Newsgroups:"]
         },
         {
-            "name": "Python: Start training news with HE",
+            "name": "Python: Start learning news with HE",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
-            "args": ["start-training", "-n", "news", "-he", "Newsgroups:"]
+            "args": ["start-learning", "-n", "news", "-he", "Newsgroups:"]
         },
         {
-            "name": "Python: Start training news (90:10)",
+            "name": "Python: Start learning news (90:10)",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
-            "args": ["start-training", "-n", "news10"]
+            "args": ["start-learning", "-n", "news10"]
         },
         {
-            "name": "Python: Start training news (70:30)",
+            "name": "Python: Start learning news (70:30)",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
-            "args": ["start-training", "-n", "news30"]
+            "args": ["start-learning", "-n", "news30"]
         },
         {
             "name": "Python: Start testing news",
@@ -255,12 +255,12 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Start training webkb",
+            "name": "Python: Start learning webkb",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
-            "args": ["start-training", "-n", "webkb"]
+            "args": ["start-learning", "-n", "webkb"]
         },
         {
             "name": "Python: Start feature testing webkb",

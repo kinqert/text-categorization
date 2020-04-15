@@ -19,10 +19,11 @@ class Document:
 
         lines = file.readlines()
 
-        for line in lines:
-            for header in headers:
-                if line.startswith(header):
-                    lines.remove(line)
+        if headers is not None:
+            for line in lines:
+                for header in headers:
+                    if line.startswith(header):
+                        lines.remove(line)
 
         if fastReading is False:
             vectorizer = CountVectorizer(stop_words=stopWords)
