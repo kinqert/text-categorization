@@ -6,7 +6,6 @@ from prettytable import PrettyTable
 
 from importing import startImport
 from factory.datasetFactory import createDataset
-from log import printAndLog
 from result import plotWordsCountForAllDocuments, plotTestResult
 from saving import saveDataset, loadDataset
 from dataloss import analyzeLostWords
